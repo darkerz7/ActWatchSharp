@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>warnings</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CounterStrikeSharp.API" Version="1.0.287" />
+    <PackageReference Include="MySqlConnector" Version="2.4.0" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="API\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ActWatchSharpAPI">
+      <HintPath>API\ActWatchSharpAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="ClientPrefsAPI">
+      <HintPath>API\ClientPrefsAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="EntWatchSharpAPI">
+      <HintPath>API\EntWatchSharpAPI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="lang\**\*.*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
