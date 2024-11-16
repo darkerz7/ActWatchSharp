@@ -89,7 +89,6 @@ Admin Command | Privilege | Description
 `bw_ban`<br>`css_bban` | `@css/bw_ban`+`@css/bw_ban_perm`+`@css/bw_ban_long` | Allows the admin to button press bans for the player `<#userid/name/#steamid> [<time>] [<reason>]`
 `bw_unban`<br>`css_bunban` | `@css/bw_unban`+`@css/bw_unban_perm`+`@css/bw_unban_other` | Allows the admin to remove button press ban for a player `<#userid/name/#steamid> [<reason>]`
 `bw_banlist`<br>`css_bbanlist` | `@css/bw_ban` | Displays a list of button press bans
-
 `tw_ban`<br>`css_trban` | `@css/tw_ban`+`@css/tw_ban_perm`+`@css/tw_ban_long` | Allows the admin to trigger touch bans for the player `<#userid/name/#steamid> [<time>] [<reason>]`
 `tw_unban`<br>`css_trunban` | `@css/tw_unban`+`@css/tw_unban_perm`+`@css/tw_unban_other` | Allows the admin to remove trigger touch ban for a player `<#userid/name/#steamid> [<reason>]`
 `tw_banlist`<br>`css_trbanlist` | `@css/tw_ban` | Displays a list of trigger touch bans
