@@ -4,7 +4,9 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Capabilities;
 using CounterStrikeSharp.API.Modules.Timers;
 using Microsoft.Extensions.Localization;
+#if (USE_ENTWATCH)
 using EntWatchSharpAPI;
+#endif
 using ClientPrefsAPI;
 using ActWatchSharpAPI;
 
@@ -16,13 +18,13 @@ namespace ActWatchSharp
 		public override string ModuleName => "[Core]ActWatchSharp";
 		public override string ModuleDescription => "Notify players about activator of buttons/triggers";
 		public override string ModuleAuthor => "DarkerZ [RUS]";
-		public override string ModuleVersion => "0.DZ.1.beta";
+		public override string ModuleVersion => "0.DZ.2.beta";
 
 		public override void OnAllPluginsLoaded(bool hotReload)
 		{
 			try
 			{
-				PluginCapability<IActWatchSharpAPI> CapabilityEW = new("actwatch:api");
+				PluginCapability<IActWatchSharpAPI> CapabilityAW = new("actwatch:api");
 				AW._AW_api = IActWatchSharpAPI.Capability.Get();
 			}
 			catch (Exception)
@@ -42,6 +44,7 @@ namespace ActWatchSharp
 				UI.TranslatedPrintToConsole("Info.Error", 15, "ClientPrefs API Failed!");
 				LogManager.SystemAction("Info.Error", "ClientPrefs API Failed!");
 			}
+#if (USE_ENTWATCH)
 			try
 			{
 				PluginCapability<IEntWatchSharpAPI> CapabilityEW = new("entwatch:api");
@@ -51,6 +54,7 @@ namespace ActWatchSharp
 			{
 				AW._EW_api = null;
 			}
+#endif
 			if (hotReload)
 			{
 				Utilities.GetPlayers().Where(p => p is { IsValid: true, IsBot: false, IsHLTV: false }).ToList().ForEach(player =>

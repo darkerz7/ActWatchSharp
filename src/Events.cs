@@ -4,7 +4,6 @@ using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Memory.DynamicFunctions;
-using System;
 using static CounterStrikeSharp.API.Core.Listeners;
 
 namespace ActWatchSharp
@@ -214,7 +213,9 @@ namespace ActWatchSharp
 			if (player == null || caller == null || !caller.IsValid) return true;
 
 			//restrict + check EW
+#if (USE_ENTWATCH)
 			if (AW._EW_api != null && AW._EW_api.Native_EntWatch_IsButtonSpecialItem(caller)) return true;
+#endif
 			switch (iType)
 			{
 				case 0: if (Cvar.ButtonWatchButton && AW.g_ButtonBannedPlayer[player].bBanned) return false; break;

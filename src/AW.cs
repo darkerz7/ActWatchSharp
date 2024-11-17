@@ -1,6 +1,8 @@
 ﻿using ActWatchSharp.ActBan;
 using CounterStrikeSharp.API.Core;
+#if (USE_ENTWATCH)
 using EntWatchSharpAPI;
+#endif
 using ClientPrefsAPI;
 using System.Text.Json;
 using ActWatchSharpAPI;
@@ -11,7 +13,9 @@ namespace ActWatchSharp
 	{
 		public static IActWatchSharpAPI _AW_api;
 		public static AWAPI g_cAWAPI = null;
+#if (USE_ENTWATCH)
 		public static IEntWatchSharpAPI _EW_api;
+#endif
 		public static IClientPrefsAPI _CP_api;
 
 		public static PluginConfig g_CFG = new PluginConfig();

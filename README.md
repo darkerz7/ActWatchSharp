@@ -1,6 +1,5 @@
 # [Core]ActWatchSharp for CounterStrikeSharp
-Notify players about button and trigger interactions
-Beta version of the plugin, needs many improvements
+Notify players about button and trigger(Activator) interactions. Beta version of the plugin
 
 ## Features:
 1. Async functions
@@ -16,19 +15,18 @@ Beta version of the plugin, needs many improvements
 2. [MySqlConnector](https://www.nuget.org/packages/MySqlConnector/2.4.0?_src=template) (2.4.0)
 3. [System.Data.SQLite.Core](https://www.nuget.org/packages/System.Data.SQLite.Core/1.0.119?_src=template) (1.0.119)
 4. [ClientPrefs_CS2](https://github.com/darkerz7/ClientPrefs_CS2)
-5. Of necessity [EntWatchSharp](https://github.com/darkerz7/EntWatchSharp/) (But be sure to put the EW API in the folder shared)
+5. Of necessity [EntWatchSharp](https://github.com/darkerz7/EntWatchSharp/) (DefineConstants `USE_ENTWATCH`)
 6. Recomended [CSSharp-Fixes](https://github.com/darkerz7/CSSharp-Fixes)
 
 ## Installation:
 1. Install `ClientPrefs_CS2` and `CSSharp-Fixes`
-2. Compile or copy ActWatchSharp to `counterstrikesharp/plugins/ActWatchSharp` folger
+2. Compile or copy ActWatchSharp to `counterstrikesharp/plugins/ActWatchSharp` folger. To compile without EntWatch remove DefineConstants `USE_ENTWATCH` (Project Properties -> Build -> Conditional compilation symbols)
 3. Copy and configure the configuration file `db_config.json`, `plugin_config.json` and `log_config.json` to `counterstrikesharp/plugins/ActWatchSharp` folger
 4. Install or copy DLL from `Required packages` (`MySqlConnector.dll`, `SQLite.Interop.dll`, `System.Data.SQLite.dll`) to counterstrikesharp/plugins/ActWatchSharp folger
 5. Copy `lang` folger to `counterstrikesharp/plugins/ActWatchSharp/lang` folger
 6. Compile or copy ActWatchSharp to `counterstrikesharp/shared/ActWatchSharp` folger
-7. Compile or copy EntWatchSharpAPI to `counterstrikesharp/shared/EntWatchSharpAPI` folger
-9. Add CVARs to server.cfg
-10. Restart server
+7. Add CVARs to server.cfg
+8. Restart server
 
 ## Admin privileges
 Privilege | Description
