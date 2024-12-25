@@ -67,9 +67,9 @@ namespace ActWatchSharp
 				{
 					if (Cvar.ButtonGlobalEnable)
 					{
-						Server.NextFrame(async () =>
+						Server.NextFrame(() =>
 						{
-							await AW.g_ButtonBannedPlayer[pl].GetBan(pl); //Set Bban
+							AW.g_ButtonBannedPlayer[pl].GetBan(pl); //Set Bban
 							Server.NextFrame(() =>
 							{
 								if (AW.g_ButtonBannedPlayer[pl].bBanned) UI.TranslatedPrintToConsole("Info.Ban.PlayerConnect", 4, UI.PlayerInfo(pl), "Buttons Ban", AW.g_ButtonBannedPlayer[pl].iDuration, AW.g_ButtonBannedPlayer[pl].iTimeStamp_Issued, UI.PlayerInfo(AW.g_ButtonBannedPlayer[pl].sAdminName, AW.g_ButtonBannedPlayer[pl].sAdminSteamID), AW.g_ButtonBannedPlayer[pl].sReason);
@@ -81,9 +81,9 @@ namespace ActWatchSharp
 				{
 					if (Cvar.TriggerGlobalEnable)
 					{
-						Server.NextFrame(async () =>
+						Server.NextFrame(() =>
 						{
-							await AW.g_TriggerBannedPlayer[pl].GetBan(pl); //Set Tban
+							AW.g_TriggerBannedPlayer[pl].GetBan(pl); //Set Tban
 							Server.NextFrame(() =>
 							{
 								if (AW.g_TriggerBannedPlayer[pl].bBanned) UI.TranslatedPrintToConsole("Info.Ban.PlayerConnect", 4, UI.PlayerInfo(pl), "Triggers Ban", AW.g_TriggerBannedPlayer[pl].iDuration, AW.g_TriggerBannedPlayer[pl].iTimeStamp_Issued, UI.PlayerInfo(AW.g_TriggerBannedPlayer[pl].sAdminName, AW.g_TriggerBannedPlayer[pl].sAdminSteamID), AW.g_TriggerBannedPlayer[pl].sReason);
@@ -131,9 +131,9 @@ namespace ActWatchSharp
 						{
 							if (Cvar.ButtonGlobalEnable)
 							{
-								Server.NextFrame(async () =>
+								Server.NextFrame(() =>
 								{
-									await AW.g_ButtonBannedPlayer[player].GetBan(player);
+									AW.g_ButtonBannedPlayer[player].GetBan(player);
 								});
 							}
 						}
@@ -141,9 +141,9 @@ namespace ActWatchSharp
 						{
 							if (Cvar.TriggerGlobalEnable)
 							{
-								Server.NextFrame(async () =>
+								Server.NextFrame(() =>
 								{
-									await AW.g_TriggerBannedPlayer[player].GetBan(player);
+									AW.g_TriggerBannedPlayer[player].GetBan(player);
 								});
 							}
 						}
@@ -164,10 +164,10 @@ namespace ActWatchSharp
 
 			int iTime = Convert.ToInt32(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
 
-			Server.NextFrame(async () =>
+			Server.NextFrame(() =>
 			{
-				if (Cvar.ButtonGlobalEnable) await ActBanDB.OfflineUnban(sServerName, iTime, true);
-				if (Cvar.TriggerGlobalEnable) await ActBanDB.OfflineUnban(sServerName, iTime, false);
+				if (Cvar.ButtonGlobalEnable) ActBanDB.OfflineUnban(sServerName, iTime, true);
+				if (Cvar.TriggerGlobalEnable) ActBanDB.OfflineUnban(sServerName, iTime, false);
 			});
 
 			Server.NextFrame(() =>
@@ -184,9 +184,9 @@ namespace ActWatchSharp
 					{
 						if (Cvar.ButtonGlobalEnable)
 						{
-							Server.NextFrame(async () =>
+							Server.NextFrame(() =>
 							{
-								if (!await AW.g_ButtonBannedPlayer[player].GetBan(player)) AW.g_ButtonBannedPlayer[player].bBanned = false;
+								if (!AW.g_ButtonBannedPlayer[player].GetBan(player)) AW.g_ButtonBannedPlayer[player].bBanned = false;
 							});
 						}
 					}
@@ -194,9 +194,9 @@ namespace ActWatchSharp
 					{
 						if (Cvar.TriggerGlobalEnable)
 						{
-							Server.NextFrame(async () =>
+							Server.NextFrame(() =>
 							{
-								if (!await AW.g_TriggerBannedPlayer[player].GetBan(player)) AW.g_TriggerBannedPlayer[player].bBanned = false;
+								if (!AW.g_TriggerBannedPlayer[player].GetBan(player)) AW.g_TriggerBannedPlayer[player].bBanned = false;
 							});
 						}
 					}

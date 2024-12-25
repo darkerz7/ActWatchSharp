@@ -140,10 +140,10 @@ namespace ActWatchSharp
 
 			UI.PrintToAllAdminAction("Chat.Admin.Buttons.Banned", AW.g_CFG.color_warning, UI.PlayerInfo(admin), AW.g_CFG.color_disabled, target.Online ? UI.PlayerInfo(target.Player) : UI.PlayerInfo(target.Name, target.SteamID));
 			UI.PrintToAllAdminAction("Chat.Admin.Reason", AW.g_CFG.color_warning, reason);
-			Server.NextFrame(async () =>
+			Server.NextFrame(() =>
 			{
 				ActBanPlayer bbanPlayer = target.Online ? AW.g_ButtonBannedPlayer[target.Player] : new ActBanPlayer(true);
-				if (await bbanPlayer.SetBan(admin != null ? admin.PlayerName : "Console", admin != null ? AW.ConvertSteamID64ToSteamID(admin.SteamID.ToString()) : "SERVER", target.Name, target.SteamID, time, reason))
+				if (bbanPlayer.SetBan(admin != null ? admin.PlayerName : "Console", admin != null ? AW.ConvertSteamID64ToSteamID(admin.SteamID.ToString()) : "SERVER", target.Name, target.SteamID, time, reason))
 				{
 					Server.NextFrame(() =>
 					{
@@ -209,11 +209,11 @@ namespace ActWatchSharp
 			string reason = command.GetArg(2);
 			if (string.IsNullOrEmpty(reason)) reason = Cvar.ButtonUnBanReason;
 
-			Server.NextFrame(async () =>
+			Server.NextFrame(() =>
 			{
 				if (!bOnline && sTarget.ToLower().StartsWith("#steam_"))
 				{
-					target = await ActBanDB.GetBan(sTarget.Substring(1), AW.g_CFG.server_name, true);
+					target = ActBanDB.GetBan(sTarget.Substring(1), AW.g_CFG.server_name, true);
 				}
 
 				if (target == null)
@@ -246,10 +246,11 @@ namespace ActWatchSharp
 					UI.PrintToAllAdminAction("Chat.Admin.Reason", AW.g_CFG.color_warning, reason);
 				});
 
-				Server.NextFrame(async () =>
+				Server.NextFrame(() =>
 				{
-					if (await target.UnBan(admin != null ? admin.PlayerName : "Console", admin != null ? AW.ConvertSteamID64ToSteamID(admin.SteamID.ToString()) : "SERVER", target.sClientSteamID, reason))
+					if (target.UnBan(admin != null ? admin.PlayerName : "Console", admin != null ? AW.ConvertSteamID64ToSteamID(admin.SteamID.ToString()) : "SERVER", target.sClientSteamID, reason))
 					{
+						if (bOnline) AW.g_ButtonBannedPlayer[players.Single()].bBanned = false;
 						Server.NextFrame(() =>
 						{
 							if (admin != null && admin.IsValid) UI.ReplyToCommand(admin, bConsole, "Reply.Ban.UnBan.Success"); //admin.PrintToChat("Success");
@@ -442,10 +443,10 @@ namespace ActWatchSharp
 
 			UI.PrintToAllAdminAction("Chat.Admin.Triggers.Banned", AW.g_CFG.color_warning, UI.PlayerInfo(admin), AW.g_CFG.color_disabled, target.Online ? UI.PlayerInfo(target.Player) : UI.PlayerInfo(target.Name, target.SteamID));
 			UI.PrintToAllAdminAction("Chat.Admin.Reason", AW.g_CFG.color_warning, reason);
-			Server.NextFrame(async () =>
+			Server.NextFrame(() =>
 			{
-				ActBanPlayer ebanPlayer = target.Online ? AW.g_TriggerBannedPlayer[target.Player] : new ActBanPlayer(false);
-				if (await ebanPlayer.SetBan(admin != null ? admin.PlayerName : "Console", admin != null ? AW.ConvertSteamID64ToSteamID(admin.SteamID.ToString()) : "SERVER", target.Name, target.SteamID, time, reason))
+				ActBanPlayer actbanPlayer = target.Online ? AW.g_TriggerBannedPlayer[target.Player] : new ActBanPlayer(false);
+				if (actbanPlayer.SetBan(admin != null ? admin.PlayerName : "Console", admin != null ? AW.ConvertSteamID64ToSteamID(admin.SteamID.ToString()) : "SERVER", target.Name, target.SteamID, time, reason))
 				{
 					Server.NextFrame(() =>
 					{
@@ -511,11 +512,11 @@ namespace ActWatchSharp
 			string reason = command.GetArg(2);
 			if (string.IsNullOrEmpty(reason)) reason = Cvar.TriggerUnBanReason;
 
-			Server.NextFrame(async () =>
+			Server.NextFrame(() =>
 			{
 				if (!bOnline && sTarget.ToLower().StartsWith("#steam_"))
 				{
-					target = await ActBanDB.GetBan(sTarget.Substring(1), AW.g_CFG.server_name, false);
+					target = ActBanDB.GetBan(sTarget.Substring(1), AW.g_CFG.server_name, false);
 				}
 
 				if (target == null)
@@ -548,10 +549,11 @@ namespace ActWatchSharp
 					UI.PrintToAllAdminAction("Chat.Admin.Reason", AW.g_CFG.color_warning, reason);
 				});
 
-				Server.NextFrame(async () =>
+				Server.NextFrame(() =>
 				{
-					if (await target.UnBan(admin != null ? admin.PlayerName : "Console", admin != null ? AW.ConvertSteamID64ToSteamID(admin.SteamID.ToString()) : "SERVER", target.sClientSteamID, reason))
+					if (target.UnBan(admin != null ? admin.PlayerName : "Console", admin != null ? AW.ConvertSteamID64ToSteamID(admin.SteamID.ToString()) : "SERVER", target.sClientSteamID, reason))
 					{
+						if (bOnline) AW.g_TriggerBannedPlayer[players.Single()].bBanned = false;
 						Server.NextFrame(() =>
 						{
 							if (admin != null && admin.IsValid) UI.ReplyToCommand(admin, bConsole, "Reply.Ban.UnBan.Success"); //admin.PrintToChat("Success");
@@ -655,7 +657,7 @@ namespace ActWatchSharp
 			});
 			if (iCount == 0) UI.ReplyToCommand(admin, bConsole, "Reply.Ban.NoPlayers");
 		}
-		//Eban End
+		//Tban End
 		[ConsoleCommand("aw_list", "Shows a list of players including those who have disconnected")]
 		[ConsoleCommand("css_alist", "Shows a list of players including those who have disconnected")]
 		[RequiresPermissions("@css/aw_ban")]

@@ -13,7 +13,7 @@ namespace AWSTestAPI
 		public override string ModuleName => "ActWatchSharp Test API";
 		public override string ModuleDescription => "";
 		public override string ModuleAuthor => "DarkerZ [RUS]";
-		public override string ModuleVersion => "API.0.DZ.1";
+		public override string ModuleVersion => "API.0.DZ.3";
 		public override void OnAllPluginsLoaded(bool hotReload)
 		{
 			try
@@ -47,17 +47,17 @@ namespace AWSTestAPI
 
 		[ConsoleCommand("bwt_1", "")]
 		[RequiresPermissions("@css/bw_ban")]
-		public async void OnBWT1(CCSPlayerController? player, CommandInfo command)
+		public void OnBWT1(CCSPlayerController? player, CommandInfo command)
 		{
 			if (_AW_api == null || player == null || !player.IsValid) return;
-			SAWAPI_Ban ban = await _AW_api.Native_ButtonWatch_IsClientBanned(ConvertSteamID64ToSteamID(player.SteamID.ToString()));
+			SAWAPI_Ban ban = _AW_api.Native_ButtonWatch_IsClientBanned(ConvertSteamID64ToSteamID(player.SteamID.ToString()));
 			if (ban.bBanned) PrintToConsole($"You {ban.sClientName}({ban.sClientSteamID}) have a bban. Duration: {ban.iDuration}");
 			else PrintToConsole($"You have NOT a bban");
 		}
 
 		[ConsoleCommand("bwt_2", "")]
 		[RequiresPermissions("@css/bw_ban")]
-		public async void OnBWT2(CCSPlayerController? player, CommandInfo command)
+		public void OnBWT2(CCSPlayerController? player, CommandInfo command)
 		{
 			if (_AW_api == null || player == null || !player.IsValid) return;
 			SAWAPI_Ban ban = new SAWAPI_Ban();
@@ -68,13 +68,13 @@ namespace AWSTestAPI
 			ban.sReason = "Test Api Ban";
 			ban.sClientName = player.PlayerName;
 			ban.sClientSteamID = ConvertSteamID64ToSteamID(player.SteamID.ToString());
-			if (await _AW_api.Native_ButtonWatch_BanClient(ban)) PrintToConsole("Successfully bbanned");
+			if (_AW_api.Native_ButtonWatch_BanClient(ban)) PrintToConsole("Successfully bbanned");
 			else PrintToConsole("Failed to bban");
 		}
 
 		[ConsoleCommand("bwt_3", "")]
 		[RequiresPermissions("@css/bw_unban")]
-		public async void OnBWT3(CCSPlayerController? player, CommandInfo command)
+		public void OnBWT3(CCSPlayerController? player, CommandInfo command)
 		{
 			if (_AW_api == null || player == null || !player.IsValid) return;
 			SAWAPI_Ban ban = new SAWAPI_Ban();
@@ -84,29 +84,29 @@ namespace AWSTestAPI
 			ban.sReason = "Test Api UnBan";
 			ban.sClientName = player.PlayerName;
 			ban.sClientSteamID = ConvertSteamID64ToSteamID(player.SteamID.ToString());
-			if (await _AW_api.Native_ButtonWatch_UnbanClient(ban)) PrintToConsole("Successfully unbbanned");
+			if (_AW_api.Native_ButtonWatch_UnbanClient(ban)) PrintToConsole("Successfully unbbanned");
 			else PrintToConsole("Failed to unbban");
 		}
 		[ConsoleCommand("bwt_4", "")]
 		[RequiresPermissions("@css/bw_unban")]
-		public async void OnEWT4(CCSPlayerController? player, CommandInfo command)
+		public void OnEWT4(CCSPlayerController? player, CommandInfo command)
 		{
 			if (_AW_api == null || player == null || !player.IsValid) return;
-			await _AW_api.Native_ButtonWatch_UpdateStatusBanClient(player);
+			_AW_api.Native_ButtonWatch_UpdateStatusBanClient(player);
 		}
 		[ConsoleCommand("twt_1", "")]
 		[RequiresPermissions("@css/tw_ban")]
-		public async void OnTWT1(CCSPlayerController? player, CommandInfo command)
+		public void OnTWT1(CCSPlayerController? player, CommandInfo command)
 		{
 			if (_AW_api == null || player == null || !player.IsValid) return;
-			SAWAPI_Ban ban = await _AW_api.Native_TriggerWatch_IsClientBanned(ConvertSteamID64ToSteamID(player.SteamID.ToString()));
+			SAWAPI_Ban ban = _AW_api.Native_TriggerWatch_IsClientBanned(ConvertSteamID64ToSteamID(player.SteamID.ToString()));
 			if (ban.bBanned) PrintToConsole($"You {ban.sClientName}({ban.sClientSteamID}) have a trban. Duration: {ban.iDuration}");
 			else PrintToConsole($"You have NOT a tban");
 		}
 
 		[ConsoleCommand("twt_2", "")]
 		[RequiresPermissions("@css/tw_ban")]
-		public async void OnTWT2(CCSPlayerController? player, CommandInfo command)
+		public void OnTWT2(CCSPlayerController? player, CommandInfo command)
 		{
 			if (_AW_api == null || player == null || !player.IsValid) return;
 			SAWAPI_Ban ban = new SAWAPI_Ban();
@@ -117,13 +117,13 @@ namespace AWSTestAPI
 			ban.sReason = "Test Api Ban";
 			ban.sClientName = player.PlayerName;
 			ban.sClientSteamID = ConvertSteamID64ToSteamID(player.SteamID.ToString());
-			if (await _AW_api.Native_TriggerWatch_BanClient(ban)) PrintToConsole("Successfully trbanned");
+			if (_AW_api.Native_TriggerWatch_BanClient(ban)) PrintToConsole("Successfully trbanned");
 			else PrintToConsole("Failed to trban");
 		}
 
 		[ConsoleCommand("twt_3", "")]
 		[RequiresPermissions("@css/tw_unban")]
-		public async void OnTWT3(CCSPlayerController? player, CommandInfo command)
+		public void OnTWT3(CCSPlayerController? player, CommandInfo command)
 		{
 			if (_AW_api == null || player == null || !player.IsValid) return;
 			SAWAPI_Ban ban = new SAWAPI_Ban();
@@ -133,16 +133,16 @@ namespace AWSTestAPI
 			ban.sReason = "Test Api UnBan";
 			ban.sClientName = player.PlayerName;
 			ban.sClientSteamID = ConvertSteamID64ToSteamID(player.SteamID.ToString());
-			if (await _AW_api.Native_TriggerWatch_UnbanClient(ban)) PrintToConsole("Successfully untrbanned");
+			if (_AW_api.Native_TriggerWatch_UnbanClient(ban)) PrintToConsole("Successfully untrbanned");
 			else PrintToConsole("Failed to untrban");
 		}
 
 		[ConsoleCommand("twt_4", "")]
 		[RequiresPermissions("@css/tw_unban")]
-		public async void OnTWT4(CCSPlayerController? player, CommandInfo command)
+		public void OnTWT4(CCSPlayerController? player, CommandInfo command)
 		{
 			if (_AW_api == null || player == null || !player.IsValid) return;
-			await _AW_api.Native_TriggerWatch_UpdateStatusBanClient(player);
+			_AW_api.Native_TriggerWatch_UpdateStatusBanClient(player);
 		}
 
 		public static void PrintToConsole(string sMessage)

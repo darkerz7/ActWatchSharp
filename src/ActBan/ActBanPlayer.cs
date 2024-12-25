@@ -18,7 +18,7 @@ namespace ActWatchSharp
 
 		private bool bType;
 
-		public async Task<bool> SetBan(string sBanAdminName, string sBanAdminSteamID, string sBanClientName, string sBanClientSteamID, int iBanDuration, string sBanReason)
+		public bool SetBan(string sBanAdminName, string sBanAdminSteamID, string sBanClientName, string sBanClientSteamID, int iBanDuration, string sBanReason)
 		{
 			if (!string.IsNullOrEmpty(sBanClientSteamID))
 			{
@@ -56,12 +56,12 @@ namespace ActWatchSharp
 					if (bType) AW.g_cAWAPI.ButtonOnClientBanned(apiBan);
 					else AW.g_cAWAPI.TriggerOnClientBanned(apiBan);
 				}
-				return await ActBanDB.BanClient(sBanClientName, sBanClientSteamID, sAdminName, sAdminSteamID, AW.g_CFG.server_name, iDuration, iTimeStamp_Issued, sReason, bType);
+				return ActBanDB.BanClient(sBanClientName, sBanClientSteamID, sAdminName, sAdminSteamID, AW.g_CFG.server_name, iDuration, iTimeStamp_Issued, sReason, bType);
 			}
 			return false;
 		}
 
-		public async Task<bool> UnBan(string sUnBanAdminName, string sUnBanAdminSteamID, string sUnBanClientSteamID, string sUnbanReason)
+		public bool UnBan(string sUnBanAdminName, string sUnBanAdminSteamID, string sUnBanClientSteamID, string sUnbanReason)
 		{
 			if (!string.IsNullOrEmpty(sUnBanClientSteamID))
 			{
@@ -81,16 +81,16 @@ namespace ActWatchSharp
 					if (bType) AW.g_cAWAPI.ButtonOnClientUnbanned(apiBan);
 					else AW.g_cAWAPI.TriggerOnClientUnbanned(apiBan);
 				}
-				return await ActBanDB.UnBanClient(sUnBanClientSteamID, sUnBanAdminName, sUnBanAdminSteamID, AW.g_CFG.server_name, DateTimeOffset.UtcNow.ToUnixTimeSeconds(), sUnbanReason, bType);
+				return ActBanDB.UnBanClient(sUnBanClientSteamID, sUnBanAdminName, sUnBanAdminSteamID, AW.g_CFG.server_name, DateTimeOffset.UtcNow.ToUnixTimeSeconds(), sUnbanReason, bType);
 			}
 			return false;
 		}
 
-		public async Task<bool> GetBan(CCSPlayerController player)
+		public bool GetBan(CCSPlayerController player)
 		{
 			if (player.IsValid)
 			{
-				return await ActBanDB.GetBan(player, AW.g_CFG.server_name, bType);
+				return ActBanDB.GetBan(player, AW.g_CFG.server_name, bType);
 			}
 			else if (bType)
 			{

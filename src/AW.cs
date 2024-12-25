@@ -58,13 +58,13 @@ namespace ActWatchSharp
 			GetValueTrigger(player);
 		}
 #nullable enable
-		public static async void GetValueButton(CCSPlayerController? player)
+		public static void GetValueButton(CCSPlayerController? player)
 #nullable disable
 		{
 			if (player == null || !player.IsValid) return;
 			if (_CP_api != null)
 			{
-				string sValue = await _CP_api.GetClientCookie(player.SteamID.ToString(), "AW_Button");
+				string sValue = _CP_api.GetClientCookie(player.SteamID.ToString(), "AW_Button");
 				int iValue;
 				if (string.IsNullOrEmpty(sValue) || !Int32.TryParse(sValue, out iValue)) iValue = 0;
 				if (iValue == 0) g_bButton[player.Slot] = false;
@@ -72,24 +72,24 @@ namespace ActWatchSharp
 			}
 		}
 #nullable enable
-		public static async void SetValueButton(CCSPlayerController? player)
+		public static void SetValueButton(CCSPlayerController? player)
 #nullable disable
 		{
 			if (player == null || !player.IsValid) return;
 			if (_CP_api != null)
 			{
-				if (g_bButton[player.Slot]) await _CP_api.SetClientCookie(player.SteamID.ToString(), "AW_Button", "1");
-				else await _CP_api.SetClientCookie(player.SteamID.ToString(), "AW_Button", "0");
+				if (g_bButton[player.Slot]) _CP_api.SetClientCookie(player.SteamID.ToString(), "AW_Button", "1");
+				else _CP_api.SetClientCookie(player.SteamID.ToString(), "AW_Button", "0");
 			}
 		}
 #nullable enable
-		public static async void GetValueTrigger(CCSPlayerController? player)
+		public static void GetValueTrigger(CCSPlayerController? player)
 #nullable disable
 		{
 			if (player == null || !player.IsValid) return;
 			if (_CP_api != null)
 			{
-				string sValue = await _CP_api.GetClientCookie(player.SteamID.ToString(), "AW_Trigger");
+				string sValue = _CP_api.GetClientCookie(player.SteamID.ToString(), "AW_Trigger");
 				int iValue;
 				if (string.IsNullOrEmpty(sValue) || !Int32.TryParse(sValue, out iValue)) iValue = 0;
 				if (iValue == 0) g_bTrigger[player.Slot] = false;
@@ -97,14 +97,14 @@ namespace ActWatchSharp
 			}
 		}
 #nullable enable
-		public static async void SetValueTrigger(CCSPlayerController? player)
+		public static void SetValueTrigger(CCSPlayerController? player)
 #nullable disable
 		{
 			if (player == null || !player.IsValid) return;
 			if (_CP_api != null)
 			{
-				if (g_bTrigger[player.Slot]) await _CP_api.SetClientCookie(player.SteamID.ToString(), "AW_Trigger", "1");
-				else await _CP_api.SetClientCookie(player.SteamID.ToString(), "AW_Trigger", "0");
+				if (g_bTrigger[player.Slot]) _CP_api.SetClientCookie(player.SteamID.ToString(), "AW_Trigger", "1");
+				else _CP_api.SetClientCookie(player.SteamID.ToString(), "AW_Trigger", "0");
 			}
 		}
 #nullable enable

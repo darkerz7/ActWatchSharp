@@ -3,7 +3,7 @@ Notify players about button and trigger(Activator) interactions. Beta version of
 
 ## Features:
 1. Async functions
-2. SQLite and MySQL support
+2. SQLite/MySQL/PostgreSQL support
 3. Language setting for players
 4. Allows you to set up individual access for admins
 5. Keeps logs to a file and discord
@@ -12,21 +12,19 @@ Notify players about button and trigger(Activator) interactions. Beta version of
 
 ## Required packages:
 1. [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp/) (Min version: 285)
-2. [MySqlConnector](https://www.nuget.org/packages/MySqlConnector/2.4.0?_src=template) (2.4.0)
-3. [System.Data.SQLite.Core](https://www.nuget.org/packages/System.Data.SQLite.Core/1.0.119?_src=template) (1.0.119)
-4. [ClientPrefs_CS2](https://github.com/darkerz7/ClientPrefs_CS2)
-5. Of necessity [EntWatchSharp](https://github.com/darkerz7/EntWatchSharp/) (DefineConstants `USE_ENTWATCH`)
-6. Recomended [CSSharp-Fixes](https://github.com/darkerz7/CSSharp-Fixes)
+2. [AnyBaseLibCS2](https://github.com/NickFox007/AnyBaseLibCS2) (0.9.1)
+3. [ClientPrefs_CS2](https://github.com/darkerz7/ClientPrefs_CS2)
+4. Of necessity [EntWatchSharp](https://github.com/darkerz7/EntWatchSharp/) (DefineConstants `USE_ENTWATCH`)
+5. Recomended [CSSharp-Fixes](https://github.com/darkerz7/CSSharp-Fixes)
 
 ## Installation:
-1. Install `ClientPrefs_CS2` and `CSSharp-Fixes`
+1. Install `AnyBaseLibCS2`, `ClientPrefs_CS2` and `CSSharp-Fixes`
 2. Compile or copy ActWatchSharp to `counterstrikesharp/plugins/ActWatchSharp` folger. To compile without EntWatch remove DefineConstants `USE_ENTWATCH` (Project Properties -> Build -> Conditional compilation symbols)
 3. Copy and configure the configuration file `db_config.json`, `plugin_config.json` and `log_config.json` to `counterstrikesharp/plugins/ActWatchSharp` folger
-4. Install or copy DLL from `Required packages` (`MySqlConnector.dll`, `SQLite.Interop.dll`, `System.Data.SQLite.dll`) to counterstrikesharp/plugins/ActWatchSharp folger
-5. Copy `lang` folger to `counterstrikesharp/plugins/ActWatchSharp/lang` folger
-6. Compile or copy ActWatchSharp to `counterstrikesharp/shared/ActWatchSharp` folger
-7. Add CVARs to server.cfg
-8. Restart server
+4. Copy `lang` folger to `counterstrikesharp/plugins/ActWatchSharp/lang` folger
+5. Compile or copy ActWatchSharp to `counterstrikesharp/shared/ActWatchSharp` folger
+6. Add CVARs to server.cfg
+7. Restart server
 
 ## Admin privileges
 Privilege | Description

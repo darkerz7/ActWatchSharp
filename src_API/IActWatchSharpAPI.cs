@@ -1,7 +1,7 @@
 ﻿using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Capabilities;
 
-//VersionAPI: 0.DZ.1
+//VersionAPI: 0.DZ.3
 
 namespace ActWatchSharpAPI
 {
@@ -41,7 +41,7 @@ namespace ActWatchSharpAPI
 			* @return				SAWAPI_Ban struct
 			*
 			*/
-		Task<SAWAPI_Ban> Native_ButtonWatch_IsClientBanned(string sSteamID);
+		SAWAPI_Ban Native_ButtonWatch_IsClientBanned(string sSteamID);
 
 		/**
 			* Bans a player from button pressed.
@@ -51,7 +51,7 @@ namespace ActWatchSharpAPI
 			*
 			* On error/errors:		Invalid player
 			*/
-		Task<bool> Native_ButtonWatch_BanClient(SAWAPI_Ban sawPlayer);
+		bool Native_ButtonWatch_BanClient(SAWAPI_Ban sawPlayer);
 
 		/**
 			* Unbans a previously button banned player.
@@ -61,7 +61,7 @@ namespace ActWatchSharpAPI
 			*
 			* On error/errors:		Invalid player
 			*/
-		Task<bool> Native_ButtonWatch_UnbanClient(SAWAPI_Ban sawPlayer);
+		bool Native_ButtonWatch_UnbanClient(SAWAPI_Ban sawPlayer);
 
 		/**
 			* Forces a button ban status update.
@@ -70,7 +70,7 @@ namespace ActWatchSharpAPI
 			*
 			* On error/errors:		Invalid player
 			*/
-		Task Native_ButtonWatch_UpdateStatusBanClient(CCSPlayerController Player);
+		void Native_ButtonWatch_UpdateStatusBanClient(CCSPlayerController Player);
 
 		/**
 			* Checks if a player is currently trigger banned, if an integer variable is referenced the time of unban will be assigned to it.
@@ -79,7 +79,7 @@ namespace ActWatchSharpAPI
 			* @return				SAWAPI_Ban struct
 			*
 			*/
-		Task<SAWAPI_Ban> Native_TriggerWatch_IsClientBanned(string sSteamID);
+		SAWAPI_Ban Native_TriggerWatch_IsClientBanned(string sSteamID);
 
 		/**
 			* Bans a player from trigger touching.
@@ -89,7 +89,7 @@ namespace ActWatchSharpAPI
 			*
 			* On error/errors:		Invalid player
 			*/
-		Task<bool> Native_TriggerWatch_BanClient(SAWAPI_Ban sewPlayer);
+		bool Native_TriggerWatch_BanClient(SAWAPI_Ban sewPlayer);
 
 		/**
 			* Unbans a previously trigger banned player.
@@ -99,7 +99,7 @@ namespace ActWatchSharpAPI
 			*
 			* On error/errors:		Invalid player
 			*/
-		Task<bool> Native_TriggerWatch_UnbanClient(SAWAPI_Ban sawPlayer);
+		bool Native_TriggerWatch_UnbanClient(SAWAPI_Ban sawPlayer);
 
 		/**
 			* Forces a trigger ban status update.
@@ -108,7 +108,7 @@ namespace ActWatchSharpAPI
 			*
 			* On error/errors:		Invalid player
 			*/
-		Task Native_TriggerWatch_UpdateStatusBanClient(CCSPlayerController Player);
+		void Native_TriggerWatch_UpdateStatusBanClient(CCSPlayerController Player);
 
 		/**
 			* Called when a player is button-banned by any means

@@ -6,11 +6,11 @@ namespace ActWatchSharp
 {
 	internal class AWAPI : IActWatchSharpAPI
 	{
-		public async Task<SAWAPI_Ban> Native_ButtonWatch_IsClientBanned(string sSteamID)
+		public SAWAPI_Ban Native_ButtonWatch_IsClientBanned(string sSteamID)
 		{
 			if (!string.IsNullOrEmpty(sSteamID))
 			{
-				ActBanPlayer ban = await ActBanDB.GetBan(sSteamID, AW.g_CFG.server_name, true);
+				ActBanPlayer ban = ActBanDB.GetBan(sSteamID, AW.g_CFG.server_name, true);
 				if (ban != null)
 				{
 					SAWAPI_Ban apiban = new SAWAPI_Ban();
@@ -27,23 +27,23 @@ namespace ActWatchSharp
 			}
 			return new SAWAPI_Ban();
 		}
-		public async Task<bool> Native_ButtonWatch_BanClient(SAWAPI_Ban sawPlayer)
+		public bool Native_ButtonWatch_BanClient(SAWAPI_Ban sawPlayer)
 		{
-			return await ActBanDB.BanClient(sawPlayer.sClientName, sawPlayer.sClientSteamID, sawPlayer.sAdminName, sawPlayer.sAdminSteamID, AW.g_CFG.server_name, sawPlayer.iDuration, sawPlayer.iTimeStamp_Issued, sawPlayer.sReason, true);
+			return ActBanDB.BanClient(sawPlayer.sClientName, sawPlayer.sClientSteamID, sawPlayer.sAdminName, sawPlayer.sAdminSteamID, AW.g_CFG.server_name, sawPlayer.iDuration, sawPlayer.iTimeStamp_Issued, sawPlayer.sReason, true);
 		}
-		public async Task<bool> Native_ButtonWatch_UnbanClient(SAWAPI_Ban sawPlayer)
+		public bool Native_ButtonWatch_UnbanClient(SAWAPI_Ban sawPlayer)
 		{
-			return await ActBanDB.UnBanClient(sawPlayer.sClientSteamID, sawPlayer.sAdminName, sawPlayer.sAdminSteamID, AW.g_CFG.server_name, DateTimeOffset.UtcNow.ToUnixTimeSeconds(), sawPlayer.sReason, true);
+			return ActBanDB.UnBanClient(sawPlayer.sClientSteamID, sawPlayer.sAdminName, sawPlayer.sAdminSteamID, AW.g_CFG.server_name, DateTimeOffset.UtcNow.ToUnixTimeSeconds(), sawPlayer.sReason, true);
 		}
-		public async Task Native_ButtonWatch_UpdateStatusBanClient(CCSPlayerController Player)
+		public void Native_ButtonWatch_UpdateStatusBanClient(CCSPlayerController Player)
 		{
-			if (!await AW.g_ButtonBannedPlayer[Player].GetBan(Player)) AW.g_ButtonBannedPlayer[Player].bBanned = false;
+			if (!AW.g_ButtonBannedPlayer[Player].GetBan(Player)) AW.g_ButtonBannedPlayer[Player].bBanned = false;
 		}
-		public async Task<SAWAPI_Ban> Native_TriggerWatch_IsClientBanned(string sSteamID)
+		public SAWAPI_Ban Native_TriggerWatch_IsClientBanned(string sSteamID)
 		{
 			if (!string.IsNullOrEmpty(sSteamID))
 			{
-				ActBanPlayer ban = await ActBanDB.GetBan(sSteamID, AW.g_CFG.server_name, false);
+				ActBanPlayer ban = ActBanDB.GetBan(sSteamID, AW.g_CFG.server_name, false);
 				if (ban != null)
 				{
 					SAWAPI_Ban apiban = new SAWAPI_Ban();
@@ -60,17 +60,17 @@ namespace ActWatchSharp
 			}
 			return new SAWAPI_Ban();
 		}
-		public async Task<bool> Native_TriggerWatch_BanClient(SAWAPI_Ban sawPlayer)
+		public bool Native_TriggerWatch_BanClient(SAWAPI_Ban sawPlayer)
 		{
-			return await ActBanDB.BanClient(sawPlayer.sClientName, sawPlayer.sClientSteamID, sawPlayer.sAdminName, sawPlayer.sAdminSteamID, AW.g_CFG.server_name, sawPlayer.iDuration, sawPlayer.iTimeStamp_Issued, sawPlayer.sReason, false);
+			return ActBanDB.BanClient(sawPlayer.sClientName, sawPlayer.sClientSteamID, sawPlayer.sAdminName, sawPlayer.sAdminSteamID, AW.g_CFG.server_name, sawPlayer.iDuration, sawPlayer.iTimeStamp_Issued, sawPlayer.sReason, false);
 		}
-		public async Task<bool> Native_TriggerWatch_UnbanClient(SAWAPI_Ban sawPlayer)
+		public bool Native_TriggerWatch_UnbanClient(SAWAPI_Ban sawPlayer)
 		{
-			return await ActBanDB.UnBanClient(sawPlayer.sClientSteamID, sawPlayer.sAdminName, sawPlayer.sAdminSteamID, AW.g_CFG.server_name, DateTimeOffset.UtcNow.ToUnixTimeSeconds(), sawPlayer.sReason, false);
+			return ActBanDB.UnBanClient(sawPlayer.sClientSteamID, sawPlayer.sAdminName, sawPlayer.sAdminSteamID, AW.g_CFG.server_name, DateTimeOffset.UtcNow.ToUnixTimeSeconds(), sawPlayer.sReason, false);
 		}
-		public async Task Native_TriggerWatch_UpdateStatusBanClient(CCSPlayerController Player)
+		public void Native_TriggerWatch_UpdateStatusBanClient(CCSPlayerController Player)
 		{
-			if (!await AW.g_TriggerBannedPlayer[Player].GetBan(Player)) AW.g_TriggerBannedPlayer[Player].bBanned = false;
+			if (!AW.g_TriggerBannedPlayer[Player].GetBan(Player)) AW.g_TriggerBannedPlayer[Player].bBanned = false;
 		}
 		//===================================================================================================
 		public event IActWatchSharpAPI.Forward_BW_OnClientBanned Forward_ButtonWatch_OnClientBanned;
