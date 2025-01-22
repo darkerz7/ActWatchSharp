@@ -12,7 +12,7 @@ Notify players about button and trigger(Activator) interactions. Beta version of
 
 ## Required packages:
 1. [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp/) (Min version: 285)
-2. [AnyBaseLibCS2](https://github.com/NickFox007/AnyBaseLibCS2) (0.9.1)
+2. [AnyBaseLibCS2](https://github.com/NickFox007/AnyBaseLibCS2) (0.9.2)
 3. [ClientPrefs_CS2](https://github.com/darkerz7/ClientPrefs_CS2)
 4. Of necessity [EntWatchSharp](https://github.com/darkerz7/EntWatchSharp/) (DefineConstants `USE_ENTWATCH`)
 5. Recomended [CSSharp-Fixes](https://github.com/darkerz7/CSSharp-Fixes)
