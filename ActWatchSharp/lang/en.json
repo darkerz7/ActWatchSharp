@@ -3,7 +3,7 @@
   "Info.Error": "Error: {0}",
   "Info.ChangeMap": "The server changed the map to {0}",
   "Info.DB.Success": "Database connection established. Type of DB: {0}",
-  "Info.DB.Failed": "No connection to database. Type of DB: {0}. Error: {1}",
+  "Info.DB.Failed": "No connection to database. Type of DB: {0}",
   "Info.AWLoaded": "ActWatchSharp Loaded!",
   "Info.Ban.PlayerConnect": "\tPlayer: {0} has a {1}\n\t\tDuration: {2}\n\t\tTimeIssued: {3}\n\t\tAdmin: {4}\n\t\tReason: {5}",
   "Reply.No_matching_client": "There is no matching client.",
