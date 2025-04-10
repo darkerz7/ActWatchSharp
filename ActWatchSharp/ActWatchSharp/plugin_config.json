@@ -1,0 +1,8 @@
+{
+	"server_name":		"Server",
+	"color_enabled":	"{green}",
+	"color_disabled":	"{red}",
+	"color_warning":	"{orange}",
+	"color_name":		"{default}",
+	"color_steamid":	"{grey}"
+}
