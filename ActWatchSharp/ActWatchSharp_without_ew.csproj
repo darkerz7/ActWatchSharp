@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>warnings</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'" />
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" />
+
+  <ItemGroup>
+    <PackageReference Include="CounterStrikeSharp.API" Version="1.0.316" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="API\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ActWatchSharpAPI\ActWatchSharpAPI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AnyBaseLib">
+      <HintPath>API\AnyBaseLib.dll</HintPath>
+    </Reference>
+    <Reference Include="PlayerSettingsApi">
+      <HintPath>API\PlayerSettingsApi.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+	<ItemGroup>
+		<None Update="ActWatchSharp\**" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="copy /Y $(TargetDir)$(TargetName).dll $(TargetDir)ActWatchSharp\ActWatchSharp.dll" />
+		<Exec Command="if exist $(SolutionDir)build_without_ew rmdir /s/q $(SolutionDir)build_without_ew" />
+		<Exec Command="if not exist $(SolutionDir)build_without_ew mkdir $(SolutionDir)build_without_ew" />
+		<Exec Command="if not exist $(SolutionDir)build_without_ew\plugins mkdir $(SolutionDir)build_without_ew\plugins" />
+		<Exec Command="move /Y $(TargetDir)ActWatchSharp $(SolutionDir)build_without_ew\plugins\ActWatchSharp" />
+		<Exec Command="if not exist $(SolutionDir)build_without_ew\shared mkdir $(SolutionDir)build_without_ew\shared" />
+		<Exec Command="if not exist $(SolutionDir)build_without_ew\shared\ActWatchSharpAPI mkdir $(SolutionDir)build_without_ew\shared\ActWatchSharpAPI" />
+		<Exec Command="copy /Y $(TargetDir)ActWatchSharpAPI.dll $(SolutionDir)build_without_ew\shared\ActWatchSharpAPI\ActWatchSharpAPI.dll" />
+	</Target>
+
+</Project>
