@@ -1,0 +1,71 @@
+name: ActWatchSharp BUILD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  PROJECT_PATH: "ActWatchSharp.sln"
+  PROJECT_NAME: "ActWatchSharp"
+  OUTPUT_PATH: "./build"
+  PROJECT_PATH_WITHOUTEW: "ActWatchSharp_without_ew.sln"
+  OUTPUT_PATH_WITHOUTEW: "./build_without_ew"
+
+jobs:
+  build:
+    permissions: write-all
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore
+      run: dotnet restore ${{ env.PROJECT_PATH }}
+    - name: Build with EW
+      run: dotnet build ${{ env.PROJECT_PATH }} -c Release --no-restore
+    - name: Build without EW
+      run: dotnet build ${{ env.PROJECT_PATH_WITHOUTEW }} -c Release --no-restore
+  publish:
+    if: github.event_name == 'push'
+    permissions: write-all
+    runs-on: windows-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore
+      run: dotnet restore ${{ env.PROJECT_PATH }}
+    - name: Build with EW
+      run: dotnet build ${{ env.PROJECT_PATH }} -c Release --no-restore
+    - name: Build without EW
+      run: dotnet build ${{ env.PROJECT_PATH_WITHOUTEW }} -c Release --no-restore
+    - name: Set build version
+      run: |
+        $VER = Get-Content VERSION
+        echo ("BUILD_NUMBER=$VER") >> $env:GITHUB_ENV
+    - name: Zip with EW
+      run: |
+        cd ${{ env.OUTPUT_PATH }}
+        Compress-Archive -Path * -Destination "../${{ env.PROJECT_NAME }}-v.${{ env.BUILD_NUMBER }}.zip"
+    - name: Zip without EW
+      run: |
+        cd ${{ env.OUTPUT_PATH_WITHOUTEW }}
+        Compress-Archive -Path * -Destination "../${{ env.PROJECT_NAME }}-without-ew-v.${{ env.BUILD_NUMBER }}.zip"
+    - name: Publish plugin
+      uses: ncipollo/release-action@v1.12.0
+      with:
+        artifacts: "${{ env.PROJECT_NAME }}-v.${{ env.BUILD_NUMBER }}.zip,${{ env.PROJECT_NAME }}-without-ew-v.${{ env.BUILD_NUMBER }}.zip"
+        name: "${{ env.PROJECT_NAME }}-v.${{ env.BUILD_NUMBER }}"
+        tag: "${{ env.PROJECT_NAME }}-v.${{ env.BUILD_NUMBER }}"
+        generateReleaseNotes: true
+        makeLatest: true
+        body: |
+          [Core]${{ env.PROJECT_NAME }} release ${{ env.BUILD_NUMBER }} for CS#. Notify players about button and trigger(Activator) interactions.
