@@ -70,6 +70,7 @@ Cvar | Parameters | Description
 `awc_twatch_once` | `<false-true>` | Enable/Disable watch of trigger_once touching. Do bans affect.(BUG) When touched by a banned trigger disappears. (Default false)
 `awc_twatch_multiple` | `<false-true>` | Enable/Disable watch of trigger_multiple touching. Do bans affect. (Default false)
 `awc_offline_clear_time` | `<1-240>` | Time during which data is stored. (Default 30)
+`awc_player_format` | `<0-3>` | Changes the way player information is displayed by default (0 - Only Nickname, 1 - Nickname and UserID, 2 - Nickname and SteamID, 3 - Nickname, UserID and SteamID). (Default 3)
 
 ## Commands
 Client Command | Description
