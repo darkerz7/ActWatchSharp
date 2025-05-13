@@ -25,43 +25,44 @@ namespace ActWatchSharp.Helpers
 				});
 			}
 		}
-		public static void PrintToAllAdminAction(string sMessage, params object[] arg)
+		public static void PrintToAllAdminBan(string sMessage, string[] sPIF_admin, string[] sPIF_player, string sReason, string sColorMessage)
 		{
-			if (ActWatchSharp.Strlocalizer == null) return;
-			using (new WithTemporaryCulture(CultureInfo.GetCultureInfo(CoreConfig.ServerLanguage)))
+			Server.NextFrame(() =>
 			{
-				PrintToConsole(ActWatchSharp.Strlocalizer[sMessage, arg], 1);
-			}
-			LogManager.AdminAction(sMessage, arg);
-			Utilities.GetPlayers().Where(p => p is { IsValid: true, IsBot: false, IsHLTV: false }).ToList().ForEach(pl =>
-			{
-				ReplyToCommand(pl, false, sMessage, arg);
+				if (ActWatchSharp.Strlocalizer == null) return;
+				using (new WithTemporaryCulture(CultureInfo.GetCultureInfo(CoreConfig.ServerLanguage)))
+				{
+					PrintToConsole(ActWatchSharp.Strlocalizer[sMessage, AW.g_CFG.color_warning, sPIF_admin[3], sColorMessage, sPIF_player[3]], 1);
+					PrintToConsole(ActWatchSharp.Strlocalizer["Chat.Admin.Reason", AW.g_CFG.color_warning, sReason], 1);
+				}
+
+				LogManager.AdminAction(sMessage, AW.g_CFG.color_warning, sPIF_admin[3], sColorMessage, sPIF_player[3]);
+				LogManager.AdminAction("Chat.Admin.Reason", AW.g_CFG.color_warning, sReason);
+
+				Utilities.GetPlayers().Where(p => p is { IsValid: true, IsBot: false, IsHLTV: false }).ToList().ForEach(pl =>
+				{
+					ReplyToCommand(pl, false, sMessage, AW.g_CFG.color_warning, PlayerInfo(pl, sPIF_admin), sColorMessage, PlayerInfo(pl, sPIF_player));
+					ReplyToCommand(pl, false, "Chat.Admin.Reason", AW.g_CFG.color_warning, sReason);
+				});
 			});
 		}
-		public static void PrintToAllButtonAction(string sMessage, params object[] arg)
+		public static void PrintToAllActAction(string sMessage, string[] sPlayerInfoFormat, string sActName, uint iIndex, bool bType)
 		{
 			if (ActWatchSharp.Strlocalizer == null) return;
 			using (new WithTemporaryCulture(CultureInfo.GetCultureInfo(CoreConfig.ServerLanguage)))
 			{
-				PrintToConsole(ClearcolorReplacements(ActWatchSharp.Strlocalizer[sMessage, arg]), 1);
+				PrintToConsole(ClearcolorReplacements(ActWatchSharp.Strlocalizer[sMessage, sPlayerInfoFormat[3], sActName, iIndex]), 1);
 			}
-			LogManager.ActAction(sMessage, arg);
+			LogManager.ActAction(sMessage, sPlayerInfoFormat[3], sActName, iIndex);
 			Utilities.GetPlayers().Where(p => p is { IsValid: true, IsBot: false, IsHLTV: false }).ToList().ForEach(pl =>
 			{
-				if (AW.g_bButton[pl.Slot]) ReplyToCommand(pl, false, sMessage, arg);
-			});
-		}
-		public static void PrintToAllTriggerAction(string sMessage, params object[] arg)
-		{
-			if (ActWatchSharp.Strlocalizer == null) return;
-			using (new WithTemporaryCulture(CultureInfo.GetCultureInfo(CoreConfig.ServerLanguage)))
-			{
-				PrintToConsole(ClearcolorReplacements(ActWatchSharp.Strlocalizer[sMessage, arg]), 1);
-			}
-			LogManager.ActAction(sMessage, arg);
-			Utilities.GetPlayers().Where(p => p is { IsValid: true, IsBot: false, IsHLTV: false }).ToList().ForEach(pl =>
-			{
-				if (AW.g_bTrigger[pl.Slot]) ReplyToCommand(pl, false, sMessage, arg);
+				if (bType)
+				{
+					if (AW.g_bButton[pl.Slot]) ReplyToCommand(pl, false, sMessage, PlayerInfo(pl, sPlayerInfoFormat), sActName, iIndex);
+				} else
+				{
+					if (AW.g_bTrigger[pl.Slot]) ReplyToCommand(pl, false, sMessage, PlayerInfo(pl, sPlayerInfoFormat), sActName, iIndex);
+				}
 			});
 		}
 		public static void ReplyToCommand(CCSPlayerController player, bool bConsole, string sMessage, params object[] arg)
@@ -129,13 +130,39 @@ namespace ActWatchSharp.Helpers
 				* 8 - Cyan			9 - Sky			10 - Light Blue		11 - Blue
 				* 12 - Violet		13 - Pink		14 - Light Red		15 - Red */
 		}
-		public static string PlayerInfo(CCSPlayerController player)
+
+#nullable enable
+		public static string PlayerInfo(CCSPlayerController? player, string[] sPlayerInfoFormat)
+#nullable disable
 		{
-			return player != null ? $"{AW.g_CFG.color_name}{player.PlayerName}{AW.g_CFG.color_warning}[{AW.g_CFG.color_steamid}#{player.UserId}{AW.g_CFG.color_warning}|{AW.g_CFG.color_steamid}#{AW.ConvertSteamID64ToSteamID(player.SteamID.ToString())}{AW.g_CFG.color_warning}]" : PlayerInfo("Console", "Server");
+			if (player != null)
+			{
+				if (AW.g_iFormatPlayer[player.Slot] < 0 || AW.g_iFormatPlayer[player.Slot] > 3) return sPlayerInfoFormat[Cvar.PlayerFormat];
+				return sPlayerInfoFormat[AW.g_iFormatPlayer[player.Slot]];
+			}
+			return sPlayerInfoFormat[3];
 		}
-		public static string PlayerInfo(string sName, string sSteamID)
+		public static string[] PlayerInfoFormat(CCSPlayerController player)
 		{
-			return $"{AW.g_CFG.color_name}{sName} {AW.g_CFG.color_warning}[{AW.g_CFG.color_steamid}{sSteamID}{AW.g_CFG.color_warning}]";
+			if (player != null)
+			{
+				string[] sResult = new string[4];
+				sResult[0] = $"{AW.g_CFG.color_name}{player.PlayerName}{AW.g_CFG.color_warning}";
+				sResult[1] = $"{sResult[0]}[{AW.g_CFG.color_steamid}#{player.UserId}{AW.g_CFG.color_warning}]";
+				sResult[2] = $"{sResult[0]}[{AW.g_CFG.color_steamid}#{AW.ConvertSteamID64ToSteamID(player.SteamID.ToString())}{AW.g_CFG.color_warning}]";
+				sResult[3] = $"{sResult[0]}[{AW.g_CFG.color_steamid}#{player.UserId}{AW.g_CFG.color_warning}|{AW.g_CFG.color_steamid}#{AW.ConvertSteamID64ToSteamID(player.SteamID.ToString())}{AW.g_CFG.color_warning}]";
+				return sResult;
+			}
+			return PlayerInfoFormat("Console", "Server");
+		}
+		public static string[] PlayerInfoFormat(string sName, string sSteamID)
+		{
+			string[] sResult = new string[4];
+			sResult[0] = $"{AW.g_CFG.color_name}{sName}{AW.g_CFG.color_warning}";
+			sResult[1] = sResult[0];
+			sResult[2] = $"{AW.g_CFG.color_name}{sName}{AW.g_CFG.color_warning}[{AW.g_CFG.color_steamid}{sSteamID}{AW.g_CFG.color_warning}]";
+			sResult[3] = sResult[2];
+			return sResult;
 		}
 		public static string ReplaceColorTags(string input, bool bChat = true)
 		{

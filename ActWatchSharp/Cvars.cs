@@ -35,6 +35,7 @@ namespace ActWatchSharp
 		public FakeConVar<bool> FakeCvar_Trigger_watch_multiple = new("awc_twatch_multiple", "Enable/Disable watch of trigger_multiple touching. Do bans affect", false, flags: ConVarFlags.FCVAR_NONE, new RangeValidator<bool>(false, true));
 
 		public FakeConVar<int> FakeCvar_offline_clear_time = new("awc_offline_clear_time", "Time during which data is stored (1-240)", 30, flags: ConVarFlags.FCVAR_NONE, new RangeValidator<int>(1, 240));
+		public FakeConVar<byte> FakeCvar_playerformat = new("awc_player_format", "Changes the way player information is displayed by default (0 - Only Nickname, 1 - Nickname and UserID, 2 - Nickname and SteamID, 3 - Nickname, UserID and SteamID)", 3, flags: ConVarFlags.FCVAR_NOTIFY, new RangeValidator<byte>(0, 3));
 
 		private void RegisterCVARS()
 		{
@@ -175,6 +176,11 @@ namespace ActWatchSharp
 				else Cvar.OfflineClearTime = 30;
 				UI.CvarChangeNotify(FakeCvar_offline_clear_time.Name, value.ToString(), FakeCvar_offline_clear_time.Flags.HasFlag(ConVarFlags.FCVAR_NOTIFY));
 			};
+			FakeCvar_playerformat.ValueChanged += (sender, value) =>
+			{
+				Cvar.PlayerFormat = value;
+				UI.CvarChangeNotify(FakeCvar_playerformat.Name, value.ToString(), FakeCvar_playerformat.Flags.HasFlag(ConVarFlags.FCVAR_NOTIFY));
+			};
 
 			RegisterFakeConVars(typeof(ConVar));
 		}
@@ -209,5 +215,6 @@ namespace ActWatchSharp
 		public static bool TriggerWatchMultiple = false;
 
 		public static int OfflineClearTime = 30;
+		public static byte PlayerFormat = 3;
 	}
 }

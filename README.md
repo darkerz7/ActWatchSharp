@@ -9,6 +9,7 @@ Notify players about button and trigger(Activator) interactions. Beta version of
 5. Keeps logs to a file and discord
 6. Online/Offline ban/unban of button press/trigger touch
 7. API for interaction with other plugins
+8. Allows you to select the player display format
 
 ## Required packages:
 1. [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp/) (Min version: 285)
@@ -75,6 +76,7 @@ Client Command | Description
 --- | ---
 `css_buttons` | Allows players to toggle the button press display
 `css_triggers` | Allows players to toggle the trigger touch display
+`css_apf` | Allows the player to change the player display format (0 - Only Nickname, 1 - Nickname and UserID, 2 - Nickname and SteamID, 3 - Nickname, UserID and SteamID)
 `bw_status`<br>`css_bstatus` | Allows the player to view the button press ban {null/target}
 `tw_status`<br>`css_trstatus` | Allows the player to view the trigger touch ban {null/target}
 

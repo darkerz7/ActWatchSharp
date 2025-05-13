@@ -187,7 +187,7 @@ namespace ActWatchSharp
 				case 1: if (Cvar.ButtonShowDoor) bShow = true; break;
 				case 2: if (Cvar.ButtonShowPhysbox) bShow = true; break;
 			}
-			if (bShow) UI.PrintToAllButtonAction("Reply.Buttons.Activate", UI.PlayerInfo(player), sButtonName, caller.Index);
+			if (bShow) UI.PrintToAllActAction("Reply.Buttons.Activate", UI.PlayerInfoFormat(player), sButtonName, caller.Index, true);
 
 			return true;
 		}
@@ -213,7 +213,7 @@ namespace ActWatchSharp
 
 					AW.g_cAWAPI?.TriggerOnTriggerTouch(player, sTriggerName, trigger.Index);
 
-					if (Cvar.TriggerShowOnce) UI.PrintToAllTriggerAction("Reply.Triggers.StartTouch", UI.PlayerInfo(player), sTriggerName, trigger.Index);
+					if (Cvar.TriggerShowOnce) UI.PrintToAllActAction("Reply.Triggers.StartTouch", UI.PlayerInfoFormat(player), sTriggerName, trigger.Index, false);
 				} else if (string.Equals(trigger.DesignerName, "trigger_multiple"))
 				{
 					if (Cvar.TriggerWatchMultiple && AW.g_TriggerBannedPlayer[player].bBanned) return HookResult.Handled;
@@ -222,7 +222,7 @@ namespace ActWatchSharp
 
 					AW.g_cAWAPI?.TriggerOnTriggerTouch(player, sTriggerName, trigger.Index);
 
-					if (Cvar.TriggerShowMultiple) UI.PrintToAllTriggerAction("Reply.Triggers.StartTouch", UI.PlayerInfo(player), sTriggerName, trigger.Index);
+					if (Cvar.TriggerShowMultiple) UI.PrintToAllActAction("Reply.Triggers.StartTouch", UI.PlayerInfoFormat(player), sTriggerName, trigger.Index, false);
 				}			
 			}
 			catch (Exception) { }

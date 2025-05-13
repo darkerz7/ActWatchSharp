@@ -39,6 +39,7 @@ namespace ActWatchSharp
 
 			RemoveCommand("css_buttons", OnAWButtons);
 			RemoveCommand("css_triggers", OnAWTriggers);
+			RemoveCommand("css_apf", OnAWChangePlayerFormat);
 		}
 
 		[ConsoleCommand("aw_reload", "Reload plugin config")]
@@ -89,7 +90,7 @@ namespace ActWatchSharp
 
 				if (AW.g_ButtonBannedPlayer[targetOnline].bBanned)
 				{
-					UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(targetOnline)} {Strlocalizer["Reply.Buttons.Has_a_ban"]}");
+					UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(admin, UI.PlayerInfoFormat(targetOnline))} {Strlocalizer["Reply.Buttons.Has_a_ban"]}");
 					return;
 				}
 
@@ -139,8 +140,8 @@ namespace ActWatchSharp
 			string reason = command.GetArg(3);
 			if (string.IsNullOrEmpty(reason)) reason = Cvar.ButtonBanReason;
 
-			UI.PrintToAllAdminAction("Chat.Admin.Buttons.Banned", AW.g_CFG.color_warning, UI.PlayerInfo(admin), AW.g_CFG.color_disabled, target.Online ? UI.PlayerInfo(target.Player) : UI.PlayerInfo(target.Name, target.SteamID));
-			UI.PrintToAllAdminAction("Chat.Admin.Reason", AW.g_CFG.color_warning, reason);
+			UI.PrintToAllAdminBan("Chat.Admin.Buttons.Banned", UI.PlayerInfoFormat(admin), target.Online ? UI.PlayerInfoFormat(target.Player) : UI.PlayerInfoFormat(target.Name, target.SteamID), reason, AW.g_CFG.color_disabled);
+
 			Server.NextFrame(() =>
 			{
 				ActBanPlayer bbanPlayer = target.Online ? AW.g_ButtonBannedPlayer[target.Player] : new ActBanPlayer(true);
@@ -252,7 +253,7 @@ namespace ActWatchSharp
 
 			if (!target.bBanned)
 			{
-				UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(target.sClientName, target.sClientSteamID)} {Strlocalizer["Reply.Buttons.Can_use"]}");
+				UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(admin, UI.PlayerInfoFormat(target.sClientName, target.sClientSteamID))} {Strlocalizer["Reply.Buttons.Can_use"]}");
 				return;
 			}
 
@@ -288,11 +289,7 @@ namespace ActWatchSharp
 				});
 			}
 
-			Server.NextFrame(() =>
-			{
-				UI.PrintToAllAdminAction("Chat.Admin.Buttons.Unrestricted", AW.g_CFG.color_warning, UI.PlayerInfo(admin), AW.g_CFG.color_enabled, UI.PlayerInfo(target.sClientName, target.sClientSteamID));
-				UI.PrintToAllAdminAction("Chat.Admin.Reason", AW.g_CFG.color_warning, reason);
-			});
+			UI.PrintToAllAdminBan("Chat.Admin.Buttons.Unrestricted", UI.PlayerInfoFormat(admin), UI.PlayerInfoFormat(target.sClientName, target.sClientSteamID), reason, AW.g_CFG.color_enabled);
 		}
 
 
@@ -323,9 +320,9 @@ namespace ActWatchSharp
 			}
 			if (AW.g_ButtonBannedPlayer[target].bBanned)
 			{
-				UI.ReplyToCommandMessage(player, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(target)} {Strlocalizer["Reply.Buttons.Has_a_ban"]}");
+				UI.ReplyToCommandMessage(player, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(player, UI.PlayerInfoFormat(target))} {Strlocalizer["Reply.Buttons.Has_a_ban"]}");
 
-				UI.ReplyToCommandMessage(player, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Admin"]}: {AW.g_CFG.color_name}{UI.PlayerInfo(AW.g_ButtonBannedPlayer[target].sAdminName, AW.g_ButtonBannedPlayer[target].sAdminSteamID)}");
+				UI.ReplyToCommandMessage(player, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Admin"]}: {AW.g_CFG.color_name}{UI.PlayerInfo(player, UI.PlayerInfoFormat(AW.g_ButtonBannedPlayer[target].sAdminName, AW.g_ButtonBannedPlayer[target].sAdminSteamID))}");
 
 				switch (AW.g_ButtonBannedPlayer[target].iDuration)
 				{
@@ -340,7 +337,7 @@ namespace ActWatchSharp
 			}
 			else
 			{
-				UI.ReplyToCommandMessage(player, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(target)} {Strlocalizer["Reply.Buttons.Can_use"]}");
+				UI.ReplyToCommandMessage(player, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(player, UI.PlayerInfoFormat(target))} {Strlocalizer["Reply.Buttons.Can_use"]}");
 			}
 		}
 		[ConsoleCommand("bw_banlist", "Displays a list of buttons ban")]
@@ -361,8 +358,8 @@ namespace ActWatchSharp
 			{
 				if ((AW.g_ButtonBannedPlayer.ContainsKey(target) || AW.g_ButtonBannedPlayer.TryAdd(target, new ActBanPlayer(true))) && AW.g_ButtonBannedPlayer[target].bBanned)
 				{
-					UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}***{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(target)}{AW.g_CFG.color_warning}***");
-					UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}|{Strlocalizer["Reply.Admin"]} {AW.g_CFG.color_name}{UI.PlayerInfo(AW.g_ButtonBannedPlayer[target].sAdminName, AW.g_ButtonBannedPlayer[target].sAdminSteamID)}");
+					UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}***{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(admin, UI.PlayerInfoFormat(target))}{AW.g_CFG.color_warning}***");
+					UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}|{Strlocalizer["Reply.Admin"]} {AW.g_CFG.color_name}{UI.PlayerInfo(admin, UI.PlayerInfoFormat(AW.g_ButtonBannedPlayer[target].sAdminName, AW.g_ButtonBannedPlayer[target].sAdminSteamID))}");
 					switch (AW.g_ButtonBannedPlayer[target].iDuration)
 					{
 						case -1: UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}|{Strlocalizer["Reply.Ban.Duration"]}: {AW.g_CFG.color_enabled}{Strlocalizer["Reply.Ban.Temporary"]}"); break;
@@ -416,7 +413,7 @@ namespace ActWatchSharp
 
 				if (AW.g_TriggerBannedPlayer[targetOnline].bBanned)
 				{
-					UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(targetOnline)} {Strlocalizer["Reply.Triggers.Has_a_ban"]}");
+					UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(admin, UI.PlayerInfoFormat(targetOnline))} {Strlocalizer["Reply.Triggers.Has_a_ban"]}");
 					return;
 				}
 
@@ -466,8 +463,8 @@ namespace ActWatchSharp
 			string reason = command.GetArg(3);
 			if (string.IsNullOrEmpty(reason)) reason = Cvar.TriggerBanReason;
 
-			UI.PrintToAllAdminAction("Chat.Admin.Triggers.Banned", AW.g_CFG.color_warning, UI.PlayerInfo(admin), AW.g_CFG.color_disabled, target.Online ? UI.PlayerInfo(target.Player) : UI.PlayerInfo(target.Name, target.SteamID));
-			UI.PrintToAllAdminAction("Chat.Admin.Reason", AW.g_CFG.color_warning, reason);
+			UI.PrintToAllAdminBan("Chat.Admin.Triggers.Banned", UI.PlayerInfoFormat(admin), target.Online ? UI.PlayerInfoFormat(target.Player) : UI.PlayerInfoFormat(target.Name, target.SteamID), reason, AW.g_CFG.color_disabled);
+
 			Server.NextFrame(() =>
 			{
 				ActBanPlayer actbanPlayer = target.Online ? AW.g_TriggerBannedPlayer[target.Player] : new ActBanPlayer(false);
@@ -555,7 +552,7 @@ namespace ActWatchSharp
 
 			if (!target.bBanned)
 			{
-				UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(target.sClientName, target.sClientSteamID)} {Strlocalizer["Reply.Triggers.Can_touch"]}");
+				UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(admin, UI.PlayerInfoFormat(target.sClientName, target.sClientSteamID))} {Strlocalizer["Reply.Triggers.Can_touch"]}");
 				return;
 			}
 
@@ -591,11 +588,7 @@ namespace ActWatchSharp
 				});
 			}
 
-			Server.NextFrame(() =>
-			{
-				UI.PrintToAllAdminAction("Chat.Admin.Triggers.Unrestricted", AW.g_CFG.color_warning, UI.PlayerInfo(admin), AW.g_CFG.color_enabled, UI.PlayerInfo(target.sClientName, target.sClientSteamID));
-				UI.PrintToAllAdminAction("Chat.Admin.Reason", AW.g_CFG.color_warning, reason);
-			});
+			UI.PrintToAllAdminBan("Chat.Admin.Triggers.Unrestricted", UI.PlayerInfoFormat(admin), UI.PlayerInfoFormat(target.sClientName, target.sClientSteamID), reason, AW.g_CFG.color_enabled);
 		}
 
 		[ConsoleCommand("tw_status", "Allows players to view bans for touching triggers")]
@@ -625,9 +618,9 @@ namespace ActWatchSharp
 			}
 			if (AW.g_TriggerBannedPlayer[target].bBanned)
 			{
-				UI.ReplyToCommandMessage(player, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(target)} {Strlocalizer["Reply.Triggers.Has_a_ban"]}");
+				UI.ReplyToCommandMessage(player, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(player, UI.PlayerInfoFormat(target))} {Strlocalizer["Reply.Triggers.Has_a_ban"]}");
 
-				UI.ReplyToCommandMessage(player, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Admin"]}: {AW.g_CFG.color_name}{UI.PlayerInfo(AW.g_TriggerBannedPlayer[target].sAdminName, AW.g_TriggerBannedPlayer[target].sAdminSteamID)}");
+				UI.ReplyToCommandMessage(player, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Admin"]}: {AW.g_CFG.color_name}{UI.PlayerInfo(player, UI.PlayerInfoFormat(AW.g_TriggerBannedPlayer[target].sAdminName, AW.g_TriggerBannedPlayer[target].sAdminSteamID))}");
 
 				switch (AW.g_TriggerBannedPlayer[target].iDuration)
 				{
@@ -642,7 +635,7 @@ namespace ActWatchSharp
 			}
 			else
 			{
-				UI.ReplyToCommandMessage(player, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(target)} {Strlocalizer["Reply.Triggers.Can_touch"]}");
+				UI.ReplyToCommandMessage(player, bConsole, $"{AW.g_CFG.color_warning}{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(player, UI.PlayerInfoFormat(target))} {Strlocalizer["Reply.Triggers.Can_touch"]}");
 			}
 		}
 		[ConsoleCommand("tw_banlist", "Displays a list of bans for touching triggers")]
@@ -663,8 +656,8 @@ namespace ActWatchSharp
 			{
 				if ((AW.g_TriggerBannedPlayer.ContainsKey(target) || AW.g_TriggerBannedPlayer.TryAdd(target, new ActBanPlayer(true))) && AW.g_TriggerBannedPlayer[target].bBanned)
 				{
-					UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}***{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(target)}{AW.g_CFG.color_warning}***");
-					UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}|{Strlocalizer["Reply.Admin"]} {AW.g_CFG.color_name}{UI.PlayerInfo(AW.g_TriggerBannedPlayer[target].sAdminName, AW.g_TriggerBannedPlayer[target].sAdminSteamID)}");
+					UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}***{Strlocalizer["Reply.Player"]} {UI.PlayerInfo(admin, UI.PlayerInfoFormat(target))}{AW.g_CFG.color_warning}***");
+					UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}|{Strlocalizer["Reply.Admin"]} {AW.g_CFG.color_name}{UI.PlayerInfo(admin, UI.PlayerInfoFormat(AW.g_TriggerBannedPlayer[target].sAdminName, AW.g_TriggerBannedPlayer[target].sAdminSteamID))}");
 					switch (AW.g_TriggerBannedPlayer[target].iDuration)
 					{
 						case -1: UI.ReplyToCommandMessage(admin, bConsole, $"{AW.g_CFG.color_warning}|{Strlocalizer["Reply.Ban.Duration"]}: {AW.g_CFG.color_enabled}{Strlocalizer["Reply.Ban.Temporary"]}"); break;
@@ -753,6 +746,34 @@ namespace ActWatchSharp
 				AW.SetValueTrigger(player);
 				UI.ReplyToCommand(player, command.CallingContext == CommandCallingContext.Console, "Reply.Triggers.Player.Enable", AW.g_CFG.color_enabled);
 			}
+		}
+
+		[ConsoleCommand("css_apf", "Allows the player to change the player display format")]
+		[CommandHelper(minArgs: 1, usage: "[number] (default: 3; min 0; max 3)", whoCanExecute: CommandUsage.CLIENT_ONLY)]
+#nullable enable
+		public void OnAWChangePlayerFormat(CCSPlayerController? player, CommandInfo command)
+#nullable disable
+		{
+			if (!Cvar.ButtonGlobalEnable && !Cvar.TriggerGlobalEnable) return;
+			if (player == null || !player.IsValid) return;
+			try
+			{
+				if (!Int32.TryParse(command.GetArg(1), out int number)) number = 3;
+				if (number >= 0 && number <= 3)
+				{
+					AW.g_iFormatPlayer[player.Slot] = number;
+					AW.SetValuePIFormmat(player);
+					switch (number)
+					{
+						case 1: UI.ReplyToCommand(player, command.CallingContext == CommandCallingContext.Console, "Reply.PlayerInfo.UserID", AW.g_CFG.color_enabled); break;
+						case 2: UI.ReplyToCommand(player, command.CallingContext == CommandCallingContext.Console, "Reply.PlayerInfo.SteamID", AW.g_CFG.color_enabled); break;
+						case 3: UI.ReplyToCommand(player, command.CallingContext == CommandCallingContext.Console, "Reply.PlayerInfo.Full", AW.g_CFG.color_enabled); break;
+						default: UI.ReplyToCommand(player, command.CallingContext == CommandCallingContext.Console, "Reply.PlayerInfo.NicknameOnly", AW.g_CFG.color_enabled); break;
+					}
+				}
+				else UI.ReplyToCommand(player, command.CallingContext == CommandCallingContext.Console, "Reply.NotValid");
+			}
+			catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 		}
 	}
 }

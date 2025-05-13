@@ -28,6 +28,7 @@ namespace ActWatchSharp
 		public static List<OfflineBan> g_OfflinePlayer = [];
 		public static bool[] g_bButton = new bool[65];
 		public static bool[] g_bTrigger = new bool[65];
+		public static int[] g_iFormatPlayer = new int[65];
 
 		public static CounterStrikeSharp.API.Modules.Timers.Timer g_TimerRetryDB = null;
 		public static CounterStrikeSharp.API.Modules.Timers.Timer g_TimerUnban = null;
@@ -60,6 +61,7 @@ namespace ActWatchSharp
 		{
 			GetValueButton(player);
 			GetValueTrigger(player);
+			GetValuePIFormmat(player);
 		}
 #nullable enable
 		public static void GetValueButton(CCSPlayerController? player)
@@ -107,6 +109,29 @@ namespace ActWatchSharp
 			{
 				if (g_bTrigger[player.Slot]) _PlayerSettingsAPI.SetPlayerSettingsValue(player, "AW_Trigger", "1");
 				else _PlayerSettingsAPI.SetPlayerSettingsValue(player, "AW_Trigger", "0");
+			}
+		}
+
+#nullable enable
+		public static void GetValuePIFormmat(CCSPlayerController? player)
+#nullable disable
+		{
+			if (player == null || !player.IsValid) return;
+			if (_PlayerSettingsAPI != null)
+			{
+				string sValue = _PlayerSettingsAPI.GetPlayerSettingsValue(player, "AW_PInfo_Format", $"{Cvar.PlayerFormat}");
+				if (string.IsNullOrEmpty(sValue) || !Int32.TryParse(sValue, out int iValue)) iValue = Cvar.PlayerFormat;
+				g_iFormatPlayer[player.Slot] = iValue;
+			}
+		}
+#nullable enable
+		public static void SetValuePIFormmat(CCSPlayerController? player)
+#nullable disable
+		{
+			if (player == null || !player.IsValid) return;
+			if (_PlayerSettingsAPI != null)
+			{
+				_PlayerSettingsAPI.SetPlayerSettingsValue(player, "AW_PInfo_Format", $"{g_iFormatPlayer[player.Slot]}");
 			}
 		}
 #nullable enable
