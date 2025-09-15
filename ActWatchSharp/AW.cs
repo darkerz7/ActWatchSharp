@@ -70,10 +70,13 @@ namespace ActWatchSharp
 			if (player == null || !player.IsValid) return;
 			if (_PlayerSettingsAPI != null)
 			{
-				string sValue = _PlayerSettingsAPI.GetPlayerSettingsValue(player, "AW_Button", "0");
-				if (string.IsNullOrEmpty(sValue) || !Int32.TryParse(sValue, out int iValue)) iValue = 0;
-				if (iValue == 0) g_bButton[player.Slot] = false;
-				else g_bButton[player.Slot] = true;
+				Task.Run(() =>
+				{
+					string sValue = _PlayerSettingsAPI.GetPlayerSettingsValue(player, "AW_Button", "0");
+					if (string.IsNullOrEmpty(sValue) || !Int32.TryParse(sValue, out int iValue)) iValue = 0;
+					if (iValue == 0) g_bButton[player.Slot] = false;
+					else g_bButton[player.Slot] = true;
+				});
 			}
 		}
 #nullable enable
@@ -83,8 +86,11 @@ namespace ActWatchSharp
 			if (player == null || !player.IsValid) return;
 			if (_PlayerSettingsAPI != null)
 			{
-				if (g_bButton[player.Slot]) _PlayerSettingsAPI.SetPlayerSettingsValue(player, "AW_Button", "1");
-				else _PlayerSettingsAPI.SetPlayerSettingsValue(player, "AW_Button", "0");
+				Task.Run(() =>
+				{
+					if (g_bButton[player.Slot]) _PlayerSettingsAPI.SetPlayerSettingsValue(player, "AW_Button", "1");
+					else _PlayerSettingsAPI.SetPlayerSettingsValue(player, "AW_Button", "0");
+				});
 			}
 		}
 #nullable enable
@@ -94,10 +100,13 @@ namespace ActWatchSharp
 			if (player == null || !player.IsValid) return;
 			if (_PlayerSettingsAPI != null)
 			{
-				string sValue = _PlayerSettingsAPI.GetPlayerSettingsValue(player, "AW_Trigger", "0");
-				if (string.IsNullOrEmpty(sValue) || !Int32.TryParse(sValue, out int iValue)) iValue = 0;
-				if (iValue == 0) g_bTrigger[player.Slot] = false;
-				else g_bTrigger[player.Slot] = true;
+				Task.Run(() =>
+				{
+					string sValue = _PlayerSettingsAPI.GetPlayerSettingsValue(player, "AW_Trigger", "0");
+					if (string.IsNullOrEmpty(sValue) || !Int32.TryParse(sValue, out int iValue)) iValue = 0;
+					if (iValue == 0) g_bTrigger[player.Slot] = false;
+					else g_bTrigger[player.Slot] = true;
+				});
 			}
 		}
 #nullable enable
@@ -107,8 +116,11 @@ namespace ActWatchSharp
 			if (player == null || !player.IsValid) return;
 			if (_PlayerSettingsAPI != null)
 			{
-				if (g_bTrigger[player.Slot]) _PlayerSettingsAPI.SetPlayerSettingsValue(player, "AW_Trigger", "1");
-				else _PlayerSettingsAPI.SetPlayerSettingsValue(player, "AW_Trigger", "0");
+				Task.Run(() =>
+				{
+					if (g_bTrigger[player.Slot]) _PlayerSettingsAPI.SetPlayerSettingsValue(player, "AW_Trigger", "1");
+					else _PlayerSettingsAPI.SetPlayerSettingsValue(player, "AW_Trigger", "0");
+				});
 			}
 		}
 
@@ -119,9 +131,12 @@ namespace ActWatchSharp
 			if (player == null || !player.IsValid) return;
 			if (_PlayerSettingsAPI != null)
 			{
-				string sValue = _PlayerSettingsAPI.GetPlayerSettingsValue(player, "AW_PInfo_Format", $"{Cvar.PlayerFormat}");
-				if (string.IsNullOrEmpty(sValue) || !Int32.TryParse(sValue, out int iValue)) iValue = Cvar.PlayerFormat;
-				g_iFormatPlayer[player.Slot] = iValue;
+				Task.Run(() =>
+				{
+					string sValue = _PlayerSettingsAPI.GetPlayerSettingsValue(player, "AW_PInfo_Format", $"{Cvar.PlayerFormat}");
+					if (string.IsNullOrEmpty(sValue) || !Int32.TryParse(sValue, out int iValue)) iValue = Cvar.PlayerFormat;
+					g_iFormatPlayer[player.Slot] = iValue;
+				});
 			}
 		}
 #nullable enable
@@ -131,7 +146,10 @@ namespace ActWatchSharp
 			if (player == null || !player.IsValid) return;
 			if (_PlayerSettingsAPI != null)
 			{
-				_PlayerSettingsAPI.SetPlayerSettingsValue(player, "AW_PInfo_Format", $"{g_iFormatPlayer[player.Slot]}");
+				Task.Run(() =>
+				{
+					_PlayerSettingsAPI.SetPlayerSettingsValue(player, "AW_PInfo_Format", $"{g_iFormatPlayer[player.Slot]}");
+				});
 			}
 		}
 #nullable enable
