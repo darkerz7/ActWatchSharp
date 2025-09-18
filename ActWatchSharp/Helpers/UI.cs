@@ -22,20 +22,13 @@ namespace ActWatchSharp.Helpers
 
 			if (bClientNotify)
 			{
-				Task.Run(() =>
+				foreach(var pl in AW.g_OfflinePlayer)
 				{
-					Parallel.ForEach(AW.g_OfflinePlayer, (pl) =>
+					if (pl.Player != null && pl.Player is { IsValid: true, IsBot: false, IsHLTV: false })
 					{
-						if (pl.Player != null && pl.Player is { IsValid: true, IsBot: false, IsHLTV: false })
-						{
-							ReplyToCommand(pl.Player, false, "Cvar.Notify", sCvarName, sCvarValue);
-						}
-					});
-				});
-				/*Utilities.GetPlayers().Where(p => p is { IsValid: true, IsBot: false, IsHLTV: false }).ToList().ForEach(pl =>
-				{
-					ReplyToCommand(pl, false, "Cvar.Notify", sCvarName, sCvarValue);
-				});*/
+						ReplyToCommand(pl.Player, false, "Cvar.Notify", sCvarName, sCvarValue);
+					}
+				}
 			}
 		}
 		public static void PrintToAllAdminBan(string sMessage, string[] sPIF_admin, string[] sPIF_player, string sReason, string sColorMessage)
@@ -55,23 +48,14 @@ namespace ActWatchSharp.Helpers
 					LogManager.AdminAction("Chat.Admin.Reason", AW.g_CFG.color_warning, sReason);
 				});
 
-				Task.Run(() =>
+				foreach (var pl in AW.g_OfflinePlayer)
 				{
-					Parallel.ForEach(AW.g_OfflinePlayer, (pl) =>
+					if (pl.Player != null && pl.Player is { IsValid: true, IsBot: false, IsHLTV: false })
 					{
-						if (pl.Player != null && pl.Player is { IsValid: true, IsBot: false, IsHLTV: false })
-						{
-							ReplyToCommand(pl.Player, false, sMessage, AW.g_CFG.color_warning, PlayerInfo(pl.Player, sPIF_admin), sColorMessage, PlayerInfo(pl.Player, sPIF_player));
-							ReplyToCommand(pl.Player, false, "Chat.Admin.Reason", AW.g_CFG.color_warning, sReason);
-						}
-					});
-				});
-
-				/*Utilities.GetPlayers().Where(p => p is { IsValid: true, IsBot: false, IsHLTV: false }).ToList().ForEach(pl =>
-				{
-					ReplyToCommand(pl, false, sMessage, AW.g_CFG.color_warning, PlayerInfo(pl, sPIF_admin), sColorMessage, PlayerInfo(pl, sPIF_player));
-					ReplyToCommand(pl, false, "Chat.Admin.Reason", AW.g_CFG.color_warning, sReason);
-				});*/
+						ReplyToCommand(pl.Player, false, sMessage, AW.g_CFG.color_warning, PlayerInfo(pl.Player, sPIF_admin), sColorMessage, PlayerInfo(pl.Player, sPIF_player));
+						ReplyToCommand(pl.Player, false, "Chat.Admin.Reason", AW.g_CFG.color_warning, sReason);
+					}
+				}
 			});
 		}
 		public static void PrintToAllActAction(string sMessage, string[] sPlayerInfoFormat, string sActName, uint iIndex, bool bType)
@@ -87,34 +71,20 @@ namespace ActWatchSharp.Helpers
 				LogManager.ActAction(sMessage, sPlayerInfoFormat[3], sActName, iIndex);
 			});
 
-			Task.Run(() =>
+			foreach (var pl in AW.g_OfflinePlayer)
 			{
-				Parallel.ForEach(AW.g_OfflinePlayer, (pl) =>
+				if (pl.Player != null && pl.Player is { IsValid: true, IsBot: false, IsHLTV: false })
 				{
-					if (pl.Player != null && pl.Player is { IsValid: true, IsBot: false, IsHLTV: false })
+					if (bType)
 					{
-						if (bType)
-						{
-							if (AW.g_bButton[pl.Player.Slot]) ReplyToCommand(pl.Player, false, sMessage, PlayerInfo(pl.Player, sPlayerInfoFormat), sActName, iIndex);
-						}
-						else
-						{
-							if (AW.g_bTrigger[pl.Player.Slot]) ReplyToCommand(pl.Player, false, sMessage, PlayerInfo(pl.Player, sPlayerInfoFormat), sActName, iIndex);
-						}
+						if (AW.g_bButton[pl.Player.Slot]) ReplyToCommand(pl.Player, false, sMessage, PlayerInfo(pl.Player, sPlayerInfoFormat), sActName, iIndex);
 					}
-				});
-			});
-
-			/*Utilities.GetPlayers().Where(p => p is { IsValid: true, IsBot: false, IsHLTV: false }).ToList().ForEach(pl =>
-			{
-				if (bType)
-				{
-					if (AW.g_bButton[pl.Slot]) ReplyToCommand(pl, false, sMessage, PlayerInfo(pl, sPlayerInfoFormat), sActName, iIndex);
-				} else
-				{
-					if (AW.g_bTrigger[pl.Slot]) ReplyToCommand(pl, false, sMessage, PlayerInfo(pl, sPlayerInfoFormat), sActName, iIndex);
+					else
+					{
+						if (AW.g_bTrigger[pl.Player.Slot]) ReplyToCommand(pl.Player, false, sMessage, PlayerInfo(pl.Player, sPlayerInfoFormat), sActName, iIndex);
+					}
 				}
-			});*/
+			}
 		}
 		public static void ReplyToCommand(CCSPlayerController player, bool bConsole, string sMessage, params object[] arg)
 		{
