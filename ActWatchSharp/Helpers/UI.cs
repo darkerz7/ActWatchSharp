@@ -134,7 +134,7 @@ namespace ActWatchSharp.Helpers
 			}
 		}
 
-		public static void PrintToConsole(string sMessage, int iColor = 1, params object[] arg)
+		public static void PrintToConsole(string sMessage, int iColor = 1)
 		{
 			Console.ForegroundColor = (ConsoleColor)8;
 			Console.Write("[");
@@ -143,7 +143,7 @@ namespace ActWatchSharp.Helpers
 			Console.ForegroundColor = (ConsoleColor)8;
 			Console.Write("] ");
 			Console.ForegroundColor = (ConsoleColor)iColor;
-			Console.WriteLine(ReplaceColorTags(sMessage, false), arg);
+			Console.WriteLine(ReplaceColorTags(sMessage, false));
 			Console.ResetColor();
 			/* Colors:
 				* 0 - No color		1 - White		2 - Red-Orange		3 - Orange
@@ -199,13 +199,12 @@ namespace ActWatchSharp.Helpers
 
 			return input;
 		}
-
 		readonly static string[] colorPatterns =
-	   [
+		[
 		   "{default}", "{darkred}", "{purple}", "{green}", "{lightgreen}", "{lime}", "{red}", "{grey}",
 			"{olive}", "{a}", "{lightblue}", "{blue}", "{d}", "{pink}", "{darkorange}", "{orange}",
 			"{white}", "{yellow}", "{magenta}", "{silver}", "{bluegrey}", "{lightred}", "{cyan}", "{gray}"
-	   ];
+		];
 		readonly static string[] colorReplacements =
 		[
 			"\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08",
