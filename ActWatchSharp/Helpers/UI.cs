@@ -33,7 +33,7 @@ namespace ActWatchSharp.Helpers
 		}
 		public static void PrintToAllAdminBan(string sMessage, string[] sPIF_admin, string[] sPIF_player, string sReason, string sColorMessage)
 		{
-			Server.NextFrame(() =>
+			Server.NextWorldUpdate(() =>
 			{
 				if (ActWatchSharp.Strlocalizer == null) return;
 				using (new WithTemporaryCulture(CultureInfo.GetCultureInfo(CoreConfig.ServerLanguage)))
@@ -89,7 +89,7 @@ namespace ActWatchSharp.Helpers
 		public static void ReplyToCommand(CCSPlayerController player, bool bConsole, string sMessage, params object[] arg)
 		{
 			if (ActWatchSharp.Strlocalizer == null) return;
-			Server.NextFrame(() =>
+			Server.NextWorldUpdate(() =>
 			{
 				if (player is { IsValid: true, IsBot: false, IsHLTV: false })
 				{
@@ -112,7 +112,7 @@ namespace ActWatchSharp.Helpers
 		public static void ReplyToCommandMessage(CCSPlayerController player, bool bConsole, string sMessage)
 		{
 			if (ActWatchSharp.Strlocalizer == null) return;
-			Server.NextFrame(() =>
+			Server.NextWorldUpdate(() =>
 			{
 				if (player is { IsValid: true, IsBot: false, IsHLTV: false })
 				{

@@ -142,12 +142,12 @@ namespace ActWatchSharp
 
 			UI.PrintToAllAdminBan("Chat.Admin.Buttons.Banned", UI.PlayerInfoFormat(admin), target.Online ? UI.PlayerInfoFormat(target.Player) : UI.PlayerInfoFormat(target.Name, target.SteamID), reason, AW.g_CFG.color_disabled);
 
-			Server.NextFrame(() =>
+			Server.NextWorldUpdate(() =>
 			{
 				ActBanPlayer bbanPlayer = target.Online ? AW.g_ButtonBannedPlayer[target.Player] : new ActBanPlayer(true);
 				if (bbanPlayer.SetBan(admin != null ? admin.PlayerName : "Console", admin != null ? AW.ConvertSteamID64ToSteamID(admin.SteamID.ToString()) : "SERVER", target.Name, target.SteamID, time, reason))
 				{
-					Server.NextFrame(() =>
+					Server.NextWorldUpdate(() =>
 					{
 						if (admin != null && admin.IsValid) UI.ReplyToCommand(admin, bConsole, "Reply.Ban.Success"); //admin.PrintToChat("Success");
 						UI.TranslatedPrintToConsole("Reply.Ban.Success", 6);
@@ -156,7 +156,7 @@ namespace ActWatchSharp
 				}
 				else
 				{
-					Server.NextFrame(() =>
+					Server.NextWorldUpdate(() =>
 					{
 						if (admin != null && admin.IsValid) UI.ReplyToCommand(admin, bConsole, "Reply.Ban.Failed"); //admin.PrintToChat("Failed");
 						UI.TranslatedPrintToConsole("Reply.Ban.Failed", 15);
@@ -272,7 +272,7 @@ namespace ActWatchSharp
 			if (target.UnBan(admin != null ? admin.PlayerName : "Console", admin != null ? AW.ConvertSteamID64ToSteamID(admin.SteamID.ToString()) : "SERVER", target.sClientSteamID, reason))
 			{
 				if (player != null) AW.g_ButtonBannedPlayer[player].bBanned = false;
-				Server.NextFrame(() =>
+				Server.NextWorldUpdate(() =>
 				{
 					if (admin != null && admin.IsValid) UI.ReplyToCommand(admin, bConsole, "Reply.Ban.UnBan.Success"); //admin.PrintToChat("Success");
 					UI.TranslatedPrintToConsole("Reply.Ban.UnBan.Success", 6);
@@ -281,7 +281,7 @@ namespace ActWatchSharp
 			}
 			else
 			{
-				Server.NextFrame(() =>
+				Server.NextWorldUpdate(() =>
 				{
 					if (admin != null && admin.IsValid) UI.ReplyToCommand(admin, bConsole, "Reply.Ban.UnBan.Failed"); //admin.PrintToChat("Failed");
 					UI.TranslatedPrintToConsole("Reply.Ban.UnBan.Failed", 15);
@@ -465,12 +465,12 @@ namespace ActWatchSharp
 
 			UI.PrintToAllAdminBan("Chat.Admin.Triggers.Banned", UI.PlayerInfoFormat(admin), target.Online ? UI.PlayerInfoFormat(target.Player) : UI.PlayerInfoFormat(target.Name, target.SteamID), reason, AW.g_CFG.color_disabled);
 
-			Server.NextFrame(() =>
+			Server.NextWorldUpdate(() =>
 			{
 				ActBanPlayer actbanPlayer = target.Online ? AW.g_TriggerBannedPlayer[target.Player] : new ActBanPlayer(false);
 				if (actbanPlayer.SetBan(admin != null ? admin.PlayerName : "Console", admin != null ? AW.ConvertSteamID64ToSteamID(admin.SteamID.ToString()) : "SERVER", target.Name, target.SteamID, time, reason))
 				{
-					Server.NextFrame(() =>
+					Server.NextWorldUpdate(() =>
 					{
 						if (admin != null && admin.IsValid) UI.ReplyToCommand(admin, bConsole, "Reply.Ban.Success"); //admin.PrintToChat("Success");
 						UI.TranslatedPrintToConsole("Reply.Ban.Success", 6);
@@ -479,7 +479,7 @@ namespace ActWatchSharp
 				}
 				else
 				{
-					Server.NextFrame(() =>
+					Server.NextWorldUpdate(() =>
 					{
 						if (admin != null && admin.IsValid) UI.ReplyToCommand(admin, bConsole, "Reply.Ban.Failed"); //admin.PrintToChat("Failed");
 						UI.TranslatedPrintToConsole("Reply.Ban.Failed", 15);
@@ -571,7 +571,7 @@ namespace ActWatchSharp
 			if (target.UnBan(admin != null ? admin.PlayerName : "Console", admin != null ? AW.ConvertSteamID64ToSteamID(admin.SteamID.ToString()) : "SERVER", target.sClientSteamID, reason))
 			{
 				if (player != null) AW.g_TriggerBannedPlayer[player].bBanned = false;
-				Server.NextFrame(() =>
+				Server.NextWorldUpdate(() =>
 				{
 					if (admin != null && admin.IsValid) UI.ReplyToCommand(admin, bConsole, "Reply.Ban.UnBan.Success"); //admin.PrintToChat("Success");
 					UI.TranslatedPrintToConsole("Reply.Ban.UnBan.Success", 6);
@@ -580,7 +580,7 @@ namespace ActWatchSharp
 			}
 			else
 			{
-				Server.NextFrame(() =>
+				Server.NextWorldUpdate(() =>
 				{
 					if (admin != null && admin.IsValid) UI.ReplyToCommand(admin, bConsole, "Reply.Ban.UnBan.Failed"); //admin.PrintToChat("Failed");
 					UI.TranslatedPrintToConsole("Reply.Ban.UnBan.Failed", 15);

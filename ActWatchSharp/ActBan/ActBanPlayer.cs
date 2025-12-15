@@ -115,7 +115,7 @@ namespace ActWatchSharp.ActBan
 						value.sReason = DBQuery_Result[0][4];
 					}
 					if (bShow)
-						Server.NextFrame(() =>
+						Server.NextWorldUpdate(() =>
 						{
 							if (dActBan[player].bBanned) UI.TranslatedPrintToConsole("Info.Ban.PlayerConnect", 4, UI.PlayerInfoFormat(player)[3], "Buttons Ban", dActBan[player].iDuration, dActBan[player].iTimeStamp_Issued, UI.PlayerInfoFormat(dActBan[player].sAdminName, dActBan[player].sAdminSteamID)[3], dActBan[player].sReason);
 						});
