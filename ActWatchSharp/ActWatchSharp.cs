@@ -17,7 +17,7 @@ namespace ActWatchSharp
 		public override string ModuleName => "[Core]ActWatchSharp";
 		public override string ModuleDescription => "Notify players about activator of buttons/triggers";
 		public override string ModuleAuthor => "DarkerZ [RUS]";
-		public override string ModuleVersion => "1.DZ.1.3";
+		public override string ModuleVersion => "1.DZ.2";
 
 		public override void OnAllPluginsLoaded(bool hotReload)
 		{
@@ -90,11 +90,11 @@ namespace ActWatchSharp
 
 					ActBan.OfflineFunc.PlayerConnectFull(player);
 				});
-				AW.g_TimerRetryDB = new CounterStrikeSharp.API.Modules.Timers.Timer(1.0f, TimerRetry, TimerFlags.REPEAT);
 			}
-			AW.g_TimerUnban = new CounterStrikeSharp.API.Modules.Timers.Timer(60.0f, TimerUnban, TimerFlags.REPEAT);
+            AW.g_TimerUnban = new CounterStrikeSharp.API.Modules.Timers.Timer(60.0f, TimerUnban, TimerFlags.REPEAT);
+            AW.g_TimerRetryDB = new CounterStrikeSharp.API.Modules.Timers.Timer(5.0f, TimerRetry, TimerFlags.REPEAT);
 
-			RegEvents();
+            RegEvents();
 			RegVirtualFunctions();
 			ActBan.ActBanDB.Init_DB(ModuleDirectory);
 			LogManager.LoadConfig(ModuleDirectory);
@@ -107,17 +107,12 @@ namespace ActWatchSharp
 			UnRegVirtualFunctions();
 			UnRegEvents();
 			UnRegCommands();
-			if (AW.g_TimerRetryDB != null)
-			{
-				AW.g_TimerRetryDB.Kill();
-				AW.g_TimerRetryDB = null;
-			}
-			if (AW.g_TimerUnban != null)
-			{
-				AW.g_TimerUnban.Kill();
-				AW.g_TimerUnban = null;
-			}
-			LogManager.UnInit();
-		}
+            AW.g_TimerRetryDB?.Kill();
+            AW.g_TimerRetryDB = null;
+            AW.g_TimerUnban?.Kill();
+            AW.g_TimerUnban = null;
+            LogManager.UnInit();
+			ActBan.ActBanDB.db.AnyDB.UnSet();
+        }
 	}
 }

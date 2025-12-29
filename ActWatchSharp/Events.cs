@@ -1,6 +1,5 @@
 ﻿using ActWatchSharp.ActBan;
 using ActWatchSharp.Helpers;
-using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Memory.DynamicFunctions;
@@ -13,7 +12,8 @@ namespace ActWatchSharp
 		public void RegEvents()
 		{
 			RegisterListener<OnMapStart>(OnMapStart_Listener);
-			RegisterEventHandler<EventPlayerConnectFull>(OnEventPlayerConnectFull);
+            RegisterListener<OnMapEnd>(OnOnMapEnd_Listener);
+            RegisterEventHandler<EventPlayerConnectFull>(OnEventPlayerConnectFull);
 			RegisterEventHandler<EventPlayerDisconnect>(OnEventPlayerDisconnect);
 			HookEntityOutput("func_button", "OnPressed", (_, _, activator, caller, _, _) =>
 			{
@@ -42,7 +42,7 @@ namespace ActWatchSharp
 			});
 		}
 
-		public void UnRegEvents()
+        public void UnRegEvents()
 		{
 			RemoveListener<OnMapStart>(OnMapStart_Listener);
 			DeregisterEventHandler<EventPlayerConnectFull>(OnEventPlayerConnectFull);
@@ -54,7 +54,15 @@ namespace ActWatchSharp
 			LogManager.SystemAction("Info.ChangeMap", sMapName);
 		}
 
-		[GameEventHandler]
+        private void OnOnMapEnd_Listener()
+        {
+            foreach (var offlineplayer in AW.g_OfflinePlayer.ToList())
+            {
+                offlineplayer.UserID = -1;
+            }
+        }
+
+        [GameEventHandler]
 		private HookResult OnEventPlayerConnectFull(EventPlayerConnectFull @event, GameEventInfo info)
 		{
 			if (@event.Userid == null) return HookResult.Continue;
@@ -100,58 +108,34 @@ namespace ActWatchSharp
 
 		private void TimerRetry()
 		{
-			//Reban after reload plugin
-			if (ActBanDB.db.bDBReady)
-			{
-				Utilities.GetPlayers().ForEach(player =>
-				{
-					if (player.IsValid)
-					{
-						if (AW.g_ButtonBannedPlayer.ContainsKey(player) || AW.g_ButtonBannedPlayer.TryAdd(player, new ActBanPlayer(true)))
-						{
-							if (Cvar.ButtonGlobalEnable) ActBanPlayer.GetBan(player, true, false);
-						}
-						if (AW.g_TriggerBannedPlayer.ContainsKey(player) || AW.g_TriggerBannedPlayer.TryAdd(player, new ActBanPlayer(false)))
-						{
-							if (Cvar.TriggerGlobalEnable) ActBanPlayer.GetBan(player, false, false);
-						}
-					}
-				});
-				if (AW.g_TimerRetryDB != null)
-				{
-					AW.g_TimerRetryDB.Kill();
-					AW.g_TimerRetryDB = null;
-				}
-			}
-		}
+            ActBanDB.CheckConnection();
+        }
 
 		private void TimerUnban()
 		{
 			string sServerName = AW.g_CFG.server_name;
 			if (!string.IsNullOrEmpty(sServerName)) { sServerName = "Server"; }
 
-			if (Cvar.ButtonGlobalEnable) ActBanDB.OfflineUnban(sServerName, true);
-			if (Cvar.TriggerGlobalEnable) ActBanDB.OfflineUnban(sServerName, false);
+            int iTime = Convert.ToInt32(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+
+            if (Cvar.ButtonGlobalEnable) ActBanDB.OfflineUnban(sServerName, iTime, true);
+			if (Cvar.TriggerGlobalEnable) ActBanDB.OfflineUnban(sServerName, iTime, false);
 
 			Task.Run(() =>
 			{
 				ActBan.OfflineFunc.TimeToClear();
 			});
 
-			//Update (Un)Bans
-			Utilities.GetPlayers().ForEach(player =>
+            //Update (Un)Bans
+            if (Cvar.ButtonGlobalEnable) Parallel.ForEach(AW.g_ButtonBannedPlayer, (pair) =>
 			{
-				if (player.IsValid)
-				{
-					if (AW.g_ButtonBannedPlayer.ContainsKey(player) || AW.g_ButtonBannedPlayer.TryAdd(player, new ActBanPlayer(true)))
-					{
-						if (Cvar.ButtonGlobalEnable) ActBanPlayer.GetBan(player, true, false);
-					}
-					if (AW.g_TriggerBannedPlayer.ContainsKey(player) || AW.g_TriggerBannedPlayer.TryAdd(player, new ActBanPlayer(false)))
-					{
-						if (Cvar.TriggerGlobalEnable) ActBanPlayer.GetBan(player, false, false);
-					}
-				}
+                if (pair.Value.iDuration > 0 && pair.Value.iTimeStamp_Issued < iTime) pair.Value.bBanned = false;
+                ActBanPlayer.GetBan(pair.Key, true, false);
+			});
+            if (Cvar.TriggerGlobalEnable) Parallel.ForEach(AW.g_TriggerBannedPlayer, (pair) =>
+			{
+                if (pair.Value.iDuration > 0 && pair.Value.iTimeStamp_Issued < iTime) pair.Value.bBanned = false;
+                ActBanPlayer.GetBan(pair.Key, false, false);
 			});
 		}
 

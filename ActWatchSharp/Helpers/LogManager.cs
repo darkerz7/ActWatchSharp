@@ -33,10 +33,10 @@ namespace ActWatchSharp.Helpers
 			LWritter = null;
 		}
 	}
-	public static class LogManager
+	public static partial class LogManager
 	{
 		static List<LogCfg> LM_CFG = [];
-		static readonly Regex _invalidRegex = new (@"[^\w\(\s!@\#\$%\^&\*\(\)_\+=\-'\\:\|/`~\.,\{}\)]+");
+		static readonly Regex _invalidRegex = InvalidRegex();
 		static readonly HttpClient _httpClient = new();
 		static string ReplaceInvalid(string str) => _invalidRegex.Replace(str, "");
 
@@ -206,5 +206,8 @@ namespace ActWatchSharp.Helpers
 				}
 			}
 		}
-	}
+
+        [GeneratedRegex(@"[^\w\(\s!@\#\$%\^&\*\(\)_\+=\-'\\:\|/`~\.,\{}\)]+")]
+        private static partial Regex InvalidRegex();
+    }
 }

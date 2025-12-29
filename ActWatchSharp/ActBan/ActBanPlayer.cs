@@ -98,7 +98,7 @@ namespace ActWatchSharp.ActBan
 		{
 			ActBanDB.GetBan(player, AW.g_CFG.server_name, GetBanPlayer_Handler, bType, bShow);
 		}
-		static ActBanDB.GetBanPlayerFunc GetBanPlayer_Handler = (CCSPlayerController player, List<List<string>> DBQuery_Result, bool bType, bool bShow) =>
+		static ActBanDB.GetBanPlayerFunc GetBanPlayer_Handler = (player, DBQuery_Result, bType, bShow) =>
 		{
 			if (player.IsValid && AW.g_ButtonBannedPlayer.ContainsKey(player))
 			{
@@ -117,7 +117,7 @@ namespace ActWatchSharp.ActBan
 					if (bShow)
 						Server.NextWorldUpdate(() =>
 						{
-							if (dActBan[player].bBanned) UI.TranslatedPrintToConsole("Info.Ban.PlayerConnect", 4, UI.PlayerInfoFormat(player)[3], "Buttons Ban", dActBan[player].iDuration, dActBan[player].iTimeStamp_Issued, UI.PlayerInfoFormat(dActBan[player].sAdminName, dActBan[player].sAdminSteamID)[3], dActBan[player].sReason);
+							if (dActBan[player].bBanned) UI.TranslatedPrintToConsole("Info.Ban.PlayerConnect", 4, UI.PlayerInfoFormat(player)[3], bType ? "Buttons Ban" : "Triggers Ban", dActBan[player].iDuration, dActBan[player].iTimeStamp_Issued, UI.PlayerInfoFormat(dActBan[player].sAdminName, dActBan[player].sAdminSteamID)[3], dActBan[player].sReason);
 						});
 				}
 				else

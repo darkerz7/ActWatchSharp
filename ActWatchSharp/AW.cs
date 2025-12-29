@@ -7,6 +7,7 @@ using System.Text.Json;
 using ActWatchSharpAPI;
 using CounterStrikeSharp.API.Core.Capabilities;
 using PlayerSettings;
+using CounterStrikeSharp.API.Modules.Commands.Targeting;
 
 namespace ActWatchSharp
 {
@@ -33,7 +34,28 @@ namespace ActWatchSharp
 		public static CounterStrikeSharp.API.Modules.Timers.Timer g_TimerRetryDB = null;
 		public static CounterStrikeSharp.API.Modules.Timers.Timer g_TimerUnban = null;
 
-		public static string ConvertSteamID64ToSteamID(string steamId64)
+#nullable enable
+        public static (List<CCSPlayerController> players, string targetname, ProcessTargetResultFlag result) FindTargets(CCSPlayerController? player, string targetString, bool nobots, bool immunity, bool aliveonly)
+#nullable disable
+        {
+            var filter = ProcessTargetFilterFlag.None;
+
+            if (nobots)
+                filter |= ProcessTargetFilterFlag.FilterNoBots;
+
+            if (!immunity)
+                filter |= ProcessTargetFilterFlag.FilterNoImmunity;
+
+            if (aliveonly)
+                filter |= ProcessTargetFilterFlag.FilterAlive;
+
+            ProcessTargetResultFlag result;
+            if ((result = Target.ProcessTargetString(player, targetString, filter, true, out var targetname, out var players)) == ProcessTargetResultFlag.TargetFound)
+                return (players, targetname, result);
+
+            return ([], "", result);
+        }
+        public static string ConvertSteamID64ToSteamID(string steamId64)
 		{
 			if (ulong.TryParse(steamId64, out var communityId) && communityId > 76561197960265728)
 			{

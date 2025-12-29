@@ -9,8 +9,6 @@
   "Reply.No_matching_client": "There is no matching client.",
   "Reply.More_than_one_client_matched": "There are multiple clients that match.",
   "Reply.You_cannot_target": "Since this person's immunity level is higher than yours, you cannot target this person.",
-  "Reply.You_can_target_only_dead_players": "You can target only dead players.",
-  "Reply.You_can_target_only_alive_players": "You can target only alive players",
   "Reply.Must_be_an_integer": "The entered value must be a number",
   "Reply.Reload_configs": "Configs has been reloaded..",
   "Reply.Player": "Player",
@@ -53,14 +51,5 @@
   "Chat.Admin.Reason": "{0}Reason: {1}",
   "Reply.Offline.Info": "List of all players:",
   "Reply.Offline.OnServer": "{0}. {1}(#{2}/#{3}). Status: Online",
-  "Reply.Offline.Leave": "{0}. {1}(#{2}/#{3}). Status: left {4} minutes ago",
-  "all": "all players",
-  "bots": "bots",
-  "humans": "humans",
-  "alive": "alive players",
-  "dead": "dead players",
-  "notme": "all players except self",
-  "ct": "ct players",
-  "t": "t players",
-  "spec": "spec players"
+  "Reply.Offline.Leave": "{0}. {1}(#{2}/#{3}). Status: left {4} minutes ago"
 } 

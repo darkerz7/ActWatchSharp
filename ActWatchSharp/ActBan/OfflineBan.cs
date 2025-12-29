@@ -36,7 +36,7 @@ namespace ActWatchSharp.ActBan
 				offlineplayer = new OfflineBan();
 				AW.g_OfflinePlayer.Add(offlineplayer);
 			}
-			offlineplayer.UserID = UserID.UserId ?? 0;
+			offlineplayer.UserID = UserID.UserId ?? -1;
 			offlineplayer.Name = UserID.PlayerName;
 			offlineplayer.SteamID = AW.ConvertSteamID64ToSteamID(UserID.SteamID.ToString());
 			offlineplayer.Immutity = AdminManager.GetPlayerImmunity(UserID);
@@ -96,7 +96,12 @@ namespace ActWatchSharp.ActBan
 					UI.ReplyToCommand(admin, bConsole, "Reply.Must_be_an_integer");
 					return null;
 				}
-				foreach (OfflineBan OfflineTest in AW.g_OfflinePlayer.ToList())
+                if (iUID < 0)
+                {
+                    UI.ReplyToCommand(admin, bConsole, "Reply.No_matching_client");
+                    return null;
+                }
+                foreach (OfflineBan OfflineTest in AW.g_OfflinePlayer.ToList())
 				{
 					if (!OfflineTest.Online && OfflineTest.UserID == iUID)
 					{

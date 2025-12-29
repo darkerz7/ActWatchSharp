@@ -9,8 +9,6 @@
   "Reply.No_matching_client": "Игрок не найден",
   "Reply.More_than_one_client_matched": "Найдено несколько игроков",
   "Reply.You_cannot_target": "Иммунитет этого игрока выше вашего",
-  "Reply.You_can_target_only_dead_players": "Вы можете выбрать только мёртвых игроков",
-  "Reply.You_can_target_only_alive_players": "Вы можете выбрать только живых игроков",
   "Reply.Must_be_an_integer": "Введенное значение должно быть числом",
   "Reply.Reload_configs": "Конфиги перезагружены...",
   "Reply.Player": "Игрок",
@@ -53,14 +51,5 @@
   "Chat.Admin.Reason": "{0}Причина: {1}",
   "Reply.Offline.Info": "Список всех игроков:",
   "Reply.Offline.OnServer": "{0}. {1}(#{2}/#{3}). Статус: Онлайн",
-  "Reply.Offline.Leave": "{0}. {1}(#{2}/#{3}). Статус: вышел {4} минут назад",
-  "all": "все игроки",
-  "bots": "боты",
-  "humans": "игроки",
-  "alive": "живые игроки",
-  "dead": "мертвые игроки",
-  "notme": "все игроки кроме себя",
-  "ct": "контры",
-  "t": "террористы",
-  "spec": "спектаторы"
+  "Reply.Offline.Leave": "{0}. {1}(#{2}/#{3}). Статус: вышел {4} минут назад"
 } 

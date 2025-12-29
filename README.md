@@ -1,5 +1,5 @@
 # [Core]ActWatchSharp for CounterStrikeSharp
-Notify players about button and trigger(Activator) interactions. Beta version of the plugin
+Notify players about button and trigger(Activator) interactions
 
 ## Features:
 1. Async functions
@@ -12,14 +12,14 @@ Notify players about button and trigger(Activator) interactions. Beta version of
 8. Allows you to select the player display format
 
 ## Required packages:
-1. [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp/) (Min version: 285)
-2. [AnyBaseLibCS2](https://github.com/NickFox007/AnyBaseLibCS2) (0.9.3)
-3. [PlayerSettingsCS2](https://github.com/NickFox007/PlayerSettingsCS2) (0.9.3)
+1. [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp/)
+2. [CS2-AnyBaseLibNext](https://github.com/darkerz7/CS2-AnyBaseLibNext)
+3. [CS2-PlayerSettingsNext](https://github.com/darkerz7/CS2-PlayerSettingsNext)
 4. Of necessity [EntWatchSharp](https://github.com/darkerz7/EntWatchSharp/) (DefineConstants `USE_ENTWATCH`)
 5. Recomended [CSSharp-Fixes](https://github.com/darkerz7/CSSharp-Fixes)
 
 ## Installation:
-1. Install `AnyBaseLibCS2`, `PlayerSettingsCS2` and `CSSharp-Fixes`
+1. Install `CS2-AnyBaseLibNext`, `CS2-PlayerSettingsNext` and `CSSharp-Fixes`
 2. Compile or copy ActWatchSharp to `counterstrikesharp/plugins/ActWatchSharp` folger. To compile without EntWatch remove DefineConstants `USE_ENTWATCH` (Project Properties -> Build -> Conditional compilation symbols)
 3. Copy and configure the configuration file `db_config.json`, `plugin_config.json` and `log_config.json` to `counterstrikesharp/plugins/ActWatchSharp` folger
 4. Copy `lang` folger to `counterstrikesharp/plugins/ActWatchSharp/lang` folger

@@ -5,8 +5,8 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
+using CounterStrikeSharp.API.Modules.Commands.Targeting;
 using static ActWatchSharp.ActBan.ActBanDB;
-using static ActWatchSharp.Helpers.FindTarget;
 
 namespace ActWatchSharp
 {
@@ -68,9 +68,9 @@ namespace ActWatchSharp
 			if (admin != null && !admin.IsValid) return;
 			bool bConsole = command.CallingContext == CommandCallingContext.Console;
 
-			(List<CCSPlayerController> players, string targetname) = Find(admin, command, 1, true, true, MultipleFlags.NORMAL, false);
+            (List<CCSPlayerController> players, string _, ProcessTargetResultFlag _) = AW.FindTargets(admin, command.GetArg(1), true, true, false);
 
-			OfflineBan target = null;
+            OfflineBan target = null;
 
 			if (players.Count > 0)
 			{
@@ -178,9 +178,9 @@ namespace ActWatchSharp
 			if (admin != null && !admin.IsValid) return;
 			bool bConsole = command.CallingContext == CommandCallingContext.Console;
 
-			(List<CCSPlayerController> players, string targetname) = Find(admin, command, 1, true, true, MultipleFlags.NORMAL, false);
+            (List<CCSPlayerController> players, string _, ProcessTargetResultFlag _) = AW.FindTargets(admin, command.GetArg(1), true, true, false);
 
-			ActBanPlayer target = new(true);
+            ActBanPlayer target = new(true);
 			string sTarget = command.GetArg(1);
 
 			bool bOnline = players.Count > 0;
@@ -218,7 +218,7 @@ namespace ActWatchSharp
 			else UI.ReplyToCommand(admin, bConsole, "Reply.No_matching_client");
 		}
 #nullable enable
-		GetBanCommFunc GetBanComm_Handler = (string sClientSteamID, CCSPlayerController? admin, string reason, bool bConsole, List<List<string>> DBQuery_Result, bool bType) =>
+		GetBanCommFunc GetBanComm_Handler = (sClientSteamID, admin, reason, bConsole, DBQuery_Result, bType) =>
 #nullable disable
 		{
 			if (DBQuery_Result.Count > 0)
@@ -307,11 +307,15 @@ namespace ActWatchSharp
 			CCSPlayerController target = player;
 			if (command.ArgCount > 1)
 			{
-				(List<CCSPlayerController> players, _) = Find(player, command, 1, true, false, MultipleFlags.NORMAL);
+                (List<CCSPlayerController> players, string _, ProcessTargetResultFlag _) = AW.FindTargets(player, command.GetArg(1), true, false, false);
 
-				if (players.Count == 0) return;
+                if (players.Count == 0)
+                {
+                    UI.ReplyToCommand(player, bConsole, "Reply.No_matching_client");
+                    return;
+                }
 
-				target = players.Single();
+                target = players.Single();
 			}
 			if (target == null || !(AW.g_ButtonBannedPlayer.ContainsKey(target) || AW.g_ButtonBannedPlayer.TryAdd(target, new ActBanPlayer(true))))
 			{
@@ -391,9 +395,9 @@ namespace ActWatchSharp
 			if (admin != null && !admin.IsValid) return;
 			bool bConsole = command.CallingContext == CommandCallingContext.Console;
 
-			(List<CCSPlayerController> players, string targetname) = Find(admin, command, 1, true, true, MultipleFlags.NORMAL, false);
+            (List<CCSPlayerController> players, string _, ProcessTargetResultFlag _) = AW.FindTargets(admin, command.GetArg(1), true, true, false);
 
-			OfflineBan target = null;
+            OfflineBan target = null;
 
 			if (players.Count > 0)
 			{
@@ -501,9 +505,9 @@ namespace ActWatchSharp
 			if (admin != null && !admin.IsValid) return;
 			bool bConsole = command.CallingContext == CommandCallingContext.Console;
 
-			(List<CCSPlayerController> players, string targetname) = Find(admin, command, 1, true, true, MultipleFlags.NORMAL, false);
+            (List<CCSPlayerController> players, string _, ProcessTargetResultFlag _) = AW.FindTargets(admin, command.GetArg(1), true, true, false);
 
-			ActBanPlayer target = new(false);
+            ActBanPlayer target = new(false);
 			string sTarget = command.GetArg(1);
 
 			bool bOnline = players.Count > 0;
@@ -605,11 +609,15 @@ namespace ActWatchSharp
 			CCSPlayerController target = player;
 			if (command.ArgCount > 1)
 			{
-				(List<CCSPlayerController> players, _) = Find(player, command, 1, true, false, MultipleFlags.NORMAL);
+                (List<CCSPlayerController> players, string _, ProcessTargetResultFlag _) = AW.FindTargets(player, command.GetArg(1), true, false, false);
 
-				if (players.Count == 0) return;
+                if (players.Count == 0)
+                {
+                    UI.ReplyToCommand(player, bConsole, "Reply.No_matching_client");
+                    return;
+                }
 
-				target = players.Single();
+                target = players.Single();
 			}
 			if (target == null || !(AW.g_TriggerBannedPlayer.ContainsKey(target) || AW.g_TriggerBannedPlayer.TryAdd(target, new ActBanPlayer(true))))
 			{
