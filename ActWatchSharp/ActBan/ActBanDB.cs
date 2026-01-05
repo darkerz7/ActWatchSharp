@@ -99,7 +99,7 @@ namespace ActWatchSharp.ActBan
 			{
 				Task.Run(() =>
 				{
-					db.AnyDB.QueryAsync("INSERT INTO " + TablePrefix(bType) + TablePostfix(true) + " (client_name, client_steamid, admin_name, admin_steamid, server, duration, timestamp_issued, reason) VALUES ({ARG}, {ARG}, {ARG}, {ARG}, {ARG}, {ARG}, {ARG}, {ARG});", new List<string>([sClientName, sClientSteamID, sAdminName, sAdminSteamID, sServer, iDuration.ToString(), iTimeStamp.ToString(), sReason]), (_) => { }, true, true);
+					db.AnyDB.QueryAsync("INSERT INTO " + TablePrefix(bType) + TablePostfix(true) + " (client_name, client_steamid, admin_name, admin_steamid, server, duration, timestamp_issued, reason) VALUES ({ARG}, {ARG}, {ARG}, {ARG}, {ARG}, {ARG}::int, {ARG}::int, {ARG});", new List<string>([sClientName, sClientSteamID, sAdminName, sAdminSteamID, sServer, iDuration.ToString(), iTimeStamp.ToString(), sReason]), (_) => { }, true, true);
 				});
 			}
 		}
@@ -111,7 +111,7 @@ namespace ActWatchSharp.ActBan
 				Task.Run(() =>
 				{
 					if (bType && Cvar.ButtonKeepExpiredBan || !bType && Cvar.TriggerKeepExpiredBan)
-						db.AnyDB.QueryAsync("UPDATE " + TablePrefix(bType) + TablePostfix(true) + " SET reason_unban = {ARG}, admin_name_unban = {ARG}, admin_steamid_unban = {ARG}, timestamp_unban = {ARG} " +
+						db.AnyDB.QueryAsync("UPDATE " + TablePrefix(bType) + TablePostfix(true) + " SET reason_unban = {ARG}, admin_name_unban = {ARG}, admin_steamid_unban = {ARG}, timestamp_unban = {ARG}::int " +
 												"WHERE client_steamid={ARG} and server={ARG} and admin_steamid_unban IS NULL;" +
 											"INSERT INTO " + TablePrefix(bType) + TablePostfix(false) + " (client_name, client_steamid, admin_name, admin_steamid, server, duration, timestamp_issued, reason, reason_unban, admin_name_unban, admin_steamid_unban, timestamp_unban) " +
 												"SELECT client_name, client_steamid, admin_name, admin_steamid, server, duration, timestamp_issued, reason, reason_unban, admin_name_unban, admin_steamid_unban, timestamp_unban FROM " + TablePrefix(bType) + TablePostfix(true) +
@@ -184,7 +184,7 @@ namespace ActWatchSharp.ActBan
 					if (bType && Cvar.ButtonKeepExpiredBan || !bType && Cvar.TriggerKeepExpiredBan)
 					{
 						db.AnyDB.QueryAsync("SELECT id FROM " + TablePrefix(bType) + TablePostfix(true) +
-									" WHERE server={ARG} and duration>0 and timestamp_issued<{ARG};", new List<string>([sServer, iTime.ToString()]), (res) =>
+                                    " WHERE server={ARG} and duration>0 and timestamp_issued<{ARG}::int;", new List<string>([sServer, iTime.ToString()]), (res) =>
 									{
 										if (res.Count > 0)
 										{
@@ -194,17 +194,17 @@ namespace ActWatchSharp.ActBan
 												sIDs = sIDs + ", " + res[i][0];
 											}
 											sIDs = sIDs[2..];
-											db.AnyDB.QueryAsync("UPDATE " + TablePrefix(bType) + TablePostfix(true) + " SET reason_unban='Expired', admin_name_unban='Console', admin_steamid_unban='SERVER', timestamp_unban={ARG} WHERE id IN ({ARG});" +
+											db.AnyDB.QueryAsync("UPDATE " + TablePrefix(bType) + TablePostfix(true) + " SET reason_unban='Expired', admin_name_unban='Console', admin_steamid_unban='SERVER', timestamp_unban={ARG}::int WHERE id IN ({ARG}::int);" +
 												"INSERT INTO " + TablePrefix(bType) + TablePostfix(false) + "(client_name, client_steamid, admin_name, admin_steamid, server, duration, timestamp_issued, reason, reason_unban, admin_name_unban, admin_steamid_unban, timestamp_unban) " +
-													"SELECT client_name, client_steamid, admin_name, admin_steamid, server, duration, timestamp_issued, reason, reason_unban, admin_name_unban, admin_steamid_unban, timestamp_unban FROM " + TablePrefix(bType) + TablePostfix(true) + " WHERE id IN ({ARG});" +
-												"DELETE FROM " + TablePrefix(bType) + TablePostfix(true) + " WHERE id IN ({ARG});", new List<string>([iTime.ToString(), sIDs, sIDs, sIDs]), (_) => { }, true);
+													"SELECT client_name, client_steamid, admin_name, admin_steamid, server, duration, timestamp_issued, reason, reason_unban, admin_name_unban, admin_steamid_unban, timestamp_unban FROM " + TablePrefix(bType) + TablePostfix(true) + " WHERE id IN ({ARG}::int);" +
+												"DELETE FROM " + TablePrefix(bType) + TablePostfix(true) + " WHERE id IN ({ARG}::int);", new List<string>([iTime.ToString(), sIDs, sIDs, sIDs]), (_) => { }, true);
 										}
 									});
 					}
 					else
 					{
 						db.AnyDB.QueryAsync("DELETE FROM " + TablePrefix(bType) + TablePostfix(true) + " WHERE id IN (SELECT p.id FROM (" +
-								"SELECT id FROM " + TablePrefix(bType) + TablePostfix(true) + " WHERE server={ARG} and duration>0 and timestamp_issued<{ARG}) AS p);", new List<string>([sServer, iTime.ToString()]), (_) => { }, true);
+								"SELECT id FROM " + TablePrefix(bType) + TablePostfix(true) + " WHERE server={ARG} and duration>0 and timestamp_issued<{ARG}::int) AS p);", new List<string>([sServer, iTime.ToString()]), (_) => { }, true);
 					}
 				});
 			}
