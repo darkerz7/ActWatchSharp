@@ -37,7 +37,10 @@ namespace ActWatchSharp
 		public FakeConVar<int> FakeCvar_offline_clear_time = new("awc_offline_clear_time", "Time during which data is stored (1-240)", 30, flags: ConVarFlags.FCVAR_NONE, new RangeValidator<int>(1, 240));
 		public FakeConVar<byte> FakeCvar_playerformat = new("awc_player_format", "Changes the way player information is displayed by default (0 - Only Nickname, 1 - Nickname and UserID, 2 - Nickname and SteamID, 3 - Nickname, UserID and SteamID)", 3, flags: ConVarFlags.FCVAR_NOTIFY, new RangeValidator<byte>(0, 3));
 
-		private void RegisterCVARS()
+        public FakeConVar<float> FakeCvar_Buttons_spam_protect = new("awc_bspamprotect", "The time after which the button press will be displayed again (0-10)", 0, flags: ConVarFlags.FCVAR_NOTIFY, new RangeValidator<float>(0.0f, 10.0f));
+        public FakeConVar<float> FakeCvar_Triggers_spam_protect = new("awc_tspamprotect", "The time after which the trigger touch will be displayed again (0-10)", 0, flags: ConVarFlags.FCVAR_NOTIFY, new RangeValidator<float>(0.0f, 10.0f));
+
+        private void RegisterCVARS()
 		{
 			FakeCvar_Button_bantime.ValueChanged += (sender, value) =>
 			{
@@ -182,7 +185,19 @@ namespace ActWatchSharp
 				UI.CvarChangeNotify(FakeCvar_playerformat.Name, value.ToString(), FakeCvar_playerformat.Flags.HasFlag(ConVarFlags.FCVAR_NOTIFY));
 			};
 
-			RegisterFakeConVars(typeof(ConVar));
+            FakeCvar_Buttons_spam_protect.ValueChanged += (sender, value) =>
+            {
+                Cvar.ButtonSpam = value;
+                UI.CvarChangeNotify(FakeCvar_Buttons_spam_protect.Name, value.ToString(), FakeCvar_Buttons_spam_protect.Flags.HasFlag(ConVarFlags.FCVAR_NOTIFY));
+            };
+
+            FakeCvar_Triggers_spam_protect.ValueChanged += (sender, value) =>
+            {
+                Cvar.TriggerSpam = value;
+                UI.CvarChangeNotify(FakeCvar_Triggers_spam_protect.Name, value.ToString(), FakeCvar_Triggers_spam_protect.Flags.HasFlag(ConVarFlags.FCVAR_NOTIFY));
+            };
+
+            RegisterFakeConVars(typeof(ConVar));
 		}
 	}
 
@@ -216,5 +231,8 @@ namespace ActWatchSharp
 
 		public static int OfflineClearTime = 30;
 		public static byte PlayerFormat = 3;
-	}
+
+        public static float ButtonSpam = 0;
+        public static float TriggerSpam = 0;
+    }
 }

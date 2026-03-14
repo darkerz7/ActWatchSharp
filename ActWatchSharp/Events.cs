@@ -52,6 +52,7 @@ namespace ActWatchSharp
 		private void OnMapStart_Listener(string sMapName)
 		{
 			LogManager.SystemAction("Info.ChangeMap", sMapName);
+			SpamButtonProtect.MapStartClear();
 		}
 
         private void OnOnMapEnd_Listener()
@@ -151,7 +152,9 @@ namespace ActWatchSharp
 #if (USE_ENTWATCH)
 			if (AW._EW_api != null && AW._EW_api.Native_EntWatch_IsButtonSpecialItem(caller)) return true;
 #endif
-			switch (iType)
+			if (!AW.g_ButtonBannedPlayer.ContainsKey(player) && !AW.g_ButtonBannedPlayer.TryAdd(player, new ActBanPlayer(true))) return true;
+
+            switch (iType)
 			{
 				case 0: if (Cvar.ButtonWatchButton && AW.g_ButtonBannedPlayer[player].bBanned) return false; break;
 				case 1: if (Cvar.ButtonWatchDoor && AW.g_ButtonBannedPlayer[player].bBanned) return false; break;
@@ -189,7 +192,9 @@ namespace ActWatchSharp
 
 				if (trigger == null || !trigger.IsValid) return HookResult.Continue;
 
-				if (string.Equals(trigger.DesignerName, "trigger_once"))
+                if (!AW.g_TriggerBannedPlayer.ContainsKey(player) && !AW.g_TriggerBannedPlayer.TryAdd(player, new ActBanPlayer(true))) return HookResult.Continue;
+
+                if (string.Equals(trigger.DesignerName, "trigger_once"))
 				{
 					if (Cvar.TriggerWatchOnce && AW.g_TriggerBannedPlayer[player].bBanned) return HookResult.Handled;
 					

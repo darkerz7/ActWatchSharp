@@ -71,7 +71,10 @@ namespace ActWatchSharp.Helpers
 				LogManager.ActAction(sMessage, sPlayerInfoFormat[3], sActName, iIndex);
 			});
 
-			foreach (var pl in AW.g_OfflinePlayer)
+			if (bType) if (!SpamButtonProtect.ButtonAvailableToShow(iIndex)) return;
+			else if (!SpamButtonProtect.TriggersAvailableToShow(iIndex)) return;
+
+            foreach (var pl in AW.g_OfflinePlayer)
 			{
 				if (pl.Player != null && pl.Player is { IsValid: true, IsBot: false, IsHLTV: false })
 				{

@@ -17,7 +17,7 @@ namespace ActWatchSharp
 		public override string ModuleName => "[Core]ActWatchSharp";
 		public override string ModuleDescription => "Notify players about activator of buttons/triggers";
 		public override string ModuleAuthor => "DarkerZ [RUS]";
-		public override string ModuleVersion => "1.DZ.2.3";
+		public override string ModuleVersion => "1.DZ.2.5";
 
 		public override void OnAllPluginsLoaded(bool hotReload)
 		{
