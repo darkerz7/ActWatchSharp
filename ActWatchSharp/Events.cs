@@ -192,7 +192,7 @@ namespace ActWatchSharp
 
 				if (trigger == null || !trigger.IsValid) return HookResult.Continue;
 
-                if (!AW.g_TriggerBannedPlayer.ContainsKey(player) && !AW.g_TriggerBannedPlayer.TryAdd(player, new ActBanPlayer(true))) return HookResult.Continue;
+                if (!AW.g_TriggerBannedPlayer.ContainsKey(player) && !AW.g_TriggerBannedPlayer.TryAdd(player, new ActBanPlayer(false))) return HookResult.Continue;
 
                 if (string.Equals(trigger.DesignerName, "trigger_once"))
 				{
