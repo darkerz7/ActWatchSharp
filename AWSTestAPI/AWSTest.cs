@@ -1,5 +1,6 @@
 ﻿using ActWatchSharpAPI;
 using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Core.Attributes;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
 using CounterStrikeSharp.API.Core.Capabilities;
 using CounterStrikeSharp.API.Modules.Admin;
@@ -7,13 +8,14 @@ using CounterStrikeSharp.API.Modules.Commands;
 
 namespace AWSTestAPI
 {
+    [MinimumApiVersion(369)]
     public class AWSTest : BasePlugin
 	{
 		public static IActWatchSharpAPI? _AW_api;
 		public override string ModuleName => "ActWatchSharp Test API";
 		public override string ModuleDescription => "";
 		public override string ModuleAuthor => "DarkerZ [RUS]";
-		public override string ModuleVersion => "API.1.DZ.0";
+		public override string ModuleVersion => "API.1.DZ.1";
 		public override void OnAllPluginsLoaded(bool hotReload)
 		{
 			try

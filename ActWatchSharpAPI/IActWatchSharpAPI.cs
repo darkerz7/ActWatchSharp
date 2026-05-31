@@ -1,7 +1,7 @@
 ﻿using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Capabilities;
 
-//VersionAPI: 1.DZ.0
+//VersionAPI: 1.DZ.1
 
 namespace ActWatchSharpAPI
 {

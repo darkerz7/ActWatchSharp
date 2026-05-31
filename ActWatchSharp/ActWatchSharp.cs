@@ -4,6 +4,8 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Capabilities;
 using CounterStrikeSharp.API.Modules.Timers;
 using Microsoft.Extensions.Localization;
+using CounterStrikeSharp.API.Core.Attributes;
+
 #if (USE_ENTWATCH)
 using EntWatchSharpAPI;
 #endif
@@ -11,13 +13,14 @@ using ActWatchSharpAPI;
 
 namespace ActWatchSharp
 {
-	public partial class ActWatchSharp : BasePlugin
+    [MinimumApiVersion(369)]
+    public partial class ActWatchSharp : BasePlugin
 	{
 		public static IStringLocalizer Strlocalizer;
 		public override string ModuleName => "[Core]ActWatchSharp";
 		public override string ModuleDescription => "Notify players about activator of buttons/triggers";
 		public override string ModuleAuthor => "DarkerZ [RUS]";
-		public override string ModuleVersion => "1.DZ.2.5";
+		public override string ModuleVersion => "1.DZ.3";
 
 		public override void OnAllPluginsLoaded(bool hotReload)
 		{
